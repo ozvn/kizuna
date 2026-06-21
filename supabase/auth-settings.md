@@ -34,4 +34,6 @@ Kayıt sonrası kullanıcı **hemen giriş yapabilir**; doğrulama maili gitmez.
 
 ## Kullanıcı adı ile giriş (SQL)
 
-SQL Editor'de bir kez çalıştır: `supabase/migrations/add_login_by_username.sql`
+SQL Editor'de bir kez çalıştır: `supabase/migrations/fix_login_by_username.sql`
+
+(Eski dosya: `add_login_by_username.sql` — yeni kurulumlarda `schema.sql` içinde de var.)

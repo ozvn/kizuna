@@ -175,14 +175,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = async (identifier: string, password: string) => {
     const trimmed = identifier.trim();
-    let email = trimmed;
+    const normalized = trimmed.includes('@') ? trimmed : trimmed.toLowerCase();
+    let email = normalized;
 
-    if (!trimmed.includes('@')) {
+    if (!normalized.includes('@')) {
       const { data, error: lookupError } = await supabase.rpc('get_email_for_login', {
-        identifier: trimmed,
+        identifier: normalized,
       });
 
       if (lookupError) {
+        console.error('get_email_for_login:', lookupError);
         return { error: formatSupabaseError(lookupError.message) };
       }
 

@@ -10,6 +10,10 @@ export function formatSupabaseError(message: string): string {
     return 'Veritabanı tabloları henüz kurulmamış. Supabase Dashboard → SQL Editor → supabase/schema.sql dosyasını çalıştırın.';
   }
 
+  if (lower.includes('get_email_for_login') || lower.includes('could not find the function')) {
+    return 'Kullanıcı adı ile giriş henüz kurulmamış. Supabase SQL Editor\'de supabase/migrations/fix_login_by_username.sql dosyasını çalıştırın.';
+  }
+
   if (lower.includes('duplicate key') && lower.includes('username')) {
     return 'Bu kullanıcı adı zaten alınmış.';
   }

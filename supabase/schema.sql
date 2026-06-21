@@ -330,11 +330,12 @@ CREATE OR REPLACE FUNCTION public.get_email_for_login(identifier text)
 RETURNS text
 LANGUAGE plpgsql
 SECURITY DEFINER
-SET search_path = public
+SET search_path = public, auth
 AS $$
 DECLARE
   resolved_email text;
   clean_id text;
+  user_id uuid;
 BEGIN
   clean_id := lower(trim(identifier));
   IF clean_id = '' THEN
@@ -343,11 +344,28 @@ BEGIN
   IF clean_id LIKE '%@%' THEN
     RETURN clean_id;
   END IF;
-  SELECT u.email INTO resolved_email
+
+  SELECT p.id INTO user_id
   FROM public.profiles p
-  JOIN auth.users u ON u.id = p.id
   WHERE lower(p.username) = clean_id
   LIMIT 1;
+
+  IF user_id IS NULL THEN
+    SELECT u.id INTO user_id
+    FROM auth.users u
+    WHERE lower(trim(u.raw_user_meta_data->>'username')) = clean_id
+    LIMIT 1;
+  END IF;
+
+  IF user_id IS NULL THEN
+    RETURN NULL;
+  END IF;
+
+  SELECT u.email INTO resolved_email
+  FROM auth.users u
+  WHERE u.id = user_id
+  LIMIT 1;
+
   RETURN resolved_email;
 END;
 $$;
