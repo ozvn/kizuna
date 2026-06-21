@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" shape-rendering="crispEdges">
+  <rect width="32" height="32" fill="#FFF8F0"/>
+  <!-- ears -->
+  <rect x="9" y="6" width="3" height="4" fill="#FFC8DD"/>
+  <rect x="20" y="6" width="3" height="4" fill="#FFC8DD"/>
+  <!-- body -->
+  <rect x="8" y="10" width="16" height="14" fill="#FFC8DD"/>
+  <rect x="9" y="11" width="14" height="10" fill="#FFD4E8"/>
+  <!-- gills -->
+  <rect x="6" y="14" width="2" height="2" fill="#FFD4C4"/>
+  <rect x="24" y="14" width="2" height="2" fill="#FFD4C4"/>
+  <!-- eyes -->
+  <rect x="11" y="14" width="3" height="3" fill="#4A4560"/>
+  <rect x="12" y="15" width="1" height="1" fill="#FFF8F0"/>
+  <rect x="18" y="14" width="3" height="3" fill="#4A4560"/>
+  <rect x="19" y="15" width="1" height="1" fill="#FFF8F0"/>
+  <!-- mouth -->
+  <rect x="14" y="19" width="4" height="1" fill="#4A4560"/>
+</svg>

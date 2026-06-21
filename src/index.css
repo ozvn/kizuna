@@ -1,0 +1,682 @@
+@import "tailwindcss";
+
+@theme {
+  --color-ink: #4a3f55;
+  --color-ink-muted: #7a6f82;
+  --color-parchment: #faf6f0;
+  --color-parchment-light: #fffdf9;
+  --color-parchment-dark: #f0e8dc;
+  --color-frame: #6b5e54;
+  --color-frame-light: #d2c4b7;
+  --color-stone: #c4bbb2;
+  --color-stone-dark: #8b837a;
+  --color-cream: #fff8f0;
+  --color-cream-dark: #faf0e4;
+  --color-sage: #b8cdb8;
+  --color-sage-dark: #9bb89b;
+  --color-peach: #ffd4c4;
+  --color-peach-dark: #f5bfb0;
+  --color-lavender: #d4c4e8;
+  --color-lavender-dark: #c4b0dc;
+  --color-rose: #ffc8dd;
+  --color-rose-dark: #f0a8c0;
+  --color-mint: #b5e4c4;
+  --color-mint-dark: #95d4ac;
+  --color-sky: #a8d4f0;
+  --color-sky-dark: #88c0e8;
+  --color-coral: #ffb899;
+  --color-coral-dark: #f5a080;
+  --color-gold: #f0d890;
+  --shadow-step: 4px 4px 0 0 #8b7e72;
+  --shadow-step-sm: 2px 2px 0 0 #8b7e72;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: "Pixelify Sans", system-ui, sans-serif;
+  background-color: #efe9e1;
+  color: var(--color-ink);
+  overflow-x: hidden;
+}
+
+.font-pixel {
+  font-family: "Press Start 2P", monospace;
+}
+
+.text-stroke-soft {
+  text-shadow:
+    1px 0 0 rgba(255, 252, 248, 0.9),
+    -1px 0 0 rgba(255, 252, 248, 0.6),
+    0 1px 0 rgba(255, 252, 248, 0.7);
+}
+
+.text-stroke-title {
+  text-shadow: 2px 2px 0 var(--color-frame-light);
+}
+
+img,
+canvas,
+.pixelated {
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* ─── Tamagotchi cihaz tuvali ─── */
+.game-device-canvas {
+  min-height: 100vh;
+  min-height: 100dvh;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+  background-color: #efe9e1;
+}
+
+/* ─── Oyun konsolu çerçevesi ─── */
+.game-console {
+  width: 100%;
+  max-width: 24.375rem;
+  flex-shrink: 0;
+  background: var(--color-parchment-dark);
+  border: 3px solid var(--color-frame);
+  box-shadow: 6px 6px 0 0 #8b7e72;
+  border-radius: 2px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.game-console > .pixel-card-inner {
+  flex: 1;
+}
+
+.game-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.5rem 0.75rem;
+  border-bottom: 2px solid var(--color-frame);
+  background: var(--color-parchment);
+}
+
+.game-console-body {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 0.75rem;
+}
+
+.game-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  width: 100%;
+}
+
+.mochi-playground {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 8.75rem;
+  padding: 0.25rem 0 0;
+}
+
+.mochi-playground-stage {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mochi-podium {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 0.125rem;
+  pointer-events: none;
+}
+
+.mochi-podium-grass {
+  width: 7.5rem;
+  height: 4px;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--color-sage-dark) 0 4px,
+    var(--color-sage) 4px 8px
+  );
+  border: 2px solid var(--color-frame);
+  border-bottom: none;
+}
+
+.mochi-podium-base {
+  width: 6.25rem;
+  height: 6px;
+  background: var(--color-frame-light);
+  border: 2px solid var(--color-frame);
+  box-shadow: 2px 2px 0 0 #8b7e72;
+}
+
+.game-scene {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.bg-scene-morning {
+  background-color: #f5ebe0;
+}
+
+.bg-scene-afternoon {
+  background-color: #eef4f8;
+}
+
+.bg-scene-night {
+  background-color: #e8e0f0;
+}
+
+/* ─── Çift katmanlı panel ─── */
+.game-panel {
+  background: var(--color-frame);
+  padding: 2px;
+  border-radius: 2px;
+  box-shadow: var(--shadow-step);
+}
+
+.game-panel-inner {
+  background: var(--color-parchment-light);
+  border: 1px solid var(--color-frame-light);
+  border-radius: 1px;
+  padding: 0.625rem;
+}
+
+.pixel-card {
+  background: var(--color-frame);
+  padding: 2px;
+  border-radius: 2px;
+  box-shadow: var(--shadow-step);
+}
+
+.pixel-card > .pixel-card-inner,
+.pixel-card-inner {
+  background: var(--color-parchment-light);
+  border: 1px solid var(--color-frame-light);
+  border-radius: 1px;
+}
+
+.pixel-btn {
+  border: 2px solid var(--color-frame);
+  border-radius: 2px;
+  box-shadow: var(--shadow-step-sm);
+  background: var(--color-parchment);
+  transition: transform 0.08s steps(1), box-shadow 0.08s steps(1);
+}
+
+.pixel-btn:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 0 #8b7e72;
+}
+
+.pixel-btn:disabled {
+  cursor: not-allowed;
+}
+
+/* ─── Piksel stat bar ─── */
+.stat-track {
+  height: 10px;
+  border-radius: 1px;
+  background: var(--color-parchment-dark);
+  overflow: hidden;
+  border: 2px solid var(--color-frame);
+  box-shadow: inset 1px 1px 0 rgba(107, 94, 84, 0.15);
+}
+
+.stat-fill-pixel {
+  height: 100%;
+  border-radius: 0;
+  transition: width 0.4s steps(10);
+  image-rendering: pixelated;
+}
+
+.stat-fill-hunger {
+  background: repeating-linear-gradient(
+    90deg,
+    #ffb899 0 4px,
+    #f5a080 4px 8px
+  );
+}
+
+.stat-fill-clean {
+  background: repeating-linear-gradient(
+    90deg,
+    #b5e4c4 0 4px,
+    #95d4ac 4px 8px
+  );
+}
+
+.stat-fill-kinship {
+  background: repeating-linear-gradient(
+    90deg,
+    #ffc8dd 0 4px,
+    #d4c4e8 4px 8px
+  );
+}
+
+.stat-fill-energy {
+  background: repeating-linear-gradient(
+    90deg,
+    #a8d4f0 0 4px,
+    #88c0e8 4px 8px
+  );
+}
+
+/* ─── Bakım butonları ─── */
+.care-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.125rem;
+  padding: 0.5rem 0.25rem;
+  border-radius: 2px;
+  border: 2px solid var(--color-frame);
+  box-shadow: var(--shadow-step-sm);
+  font-size: 0.6875rem;
+  font-weight: 700;
+  color: var(--color-ink);
+  position: relative;
+  min-height: 4.25rem;
+  transition: transform 0.08s steps(1), box-shadow 0.08s steps(1);
+}
+
+.care-btn-active {
+  background: var(--color-parchment);
+}
+
+.care-btn-active:active:not(:disabled) {
+  transform: translate(2px, 2px);
+  box-shadow: 0 0 0 0 #8b7e72;
+}
+
+.care-btn-confirm {
+  outline: 2px solid var(--color-sage-dark);
+  outline-offset: 1px;
+}
+
+.care-btn-locked {
+  background: var(--color-stone) !important;
+  background-image: repeating-linear-gradient(
+    -45deg,
+    transparent 0 3px,
+    rgba(107, 94, 84, 0.06) 3px 6px
+  ) !important;
+  border-color: var(--color-stone-dark) !important;
+  box-shadow: 3px 3px 0 0 var(--color-stone-dark) !important;
+  cursor: not-allowed;
+}
+
+.care-btn-lock-icon {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  font-size: 0.625rem;
+  line-height: 1;
+  z-index: 3;
+  filter: none;
+  opacity: 1;
+}
+
+.care-btn-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.125rem;
+  z-index: 1;
+}
+
+.care-btn-body-dimmed {
+  opacity: 0.55;
+  filter: grayscale(0.4);
+}
+
+.care-btn-emoji {
+  font-size: 1.125rem;
+  line-height: 1;
+}
+
+.care-btn-feed {
+  background: var(--color-peach);
+}
+
+.care-btn-pet {
+  background: var(--color-rose);
+}
+
+.care-btn-clean {
+  background: var(--color-mint);
+}
+
+.care-btn-play {
+  background: var(--color-sky);
+}
+
+.game-input {
+  width: 100%;
+  padding: 0.5rem 0.625rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  background: var(--color-parchment);
+  border: 2px solid var(--color-frame);
+  border-radius: 2px;
+  box-shadow: inset 1px 1px 0 rgba(107, 94, 84, 0.08);
+}
+
+.game-input:focus {
+  outline: 2px solid var(--color-lavender-dark);
+  outline-offset: 1px;
+}
+
+.game-input::placeholder {
+  color: var(--color-ink-muted);
+  opacity: 0.7;
+}
+
+.game-alert {
+  padding: 0.5rem 0.625rem;
+  font-size: 0.6875rem;
+  font-weight: 600;
+  border: 2px solid var(--color-frame);
+  border-radius: 2px;
+  box-shadow: var(--shadow-step-sm);
+}
+
+.game-alert-error {
+  color: var(--color-coral-dark);
+  background: var(--color-peach);
+  border-color: var(--color-coral-dark);
+}
+
+.game-alert-success {
+  color: var(--color-sage-dark);
+  background: var(--color-mint);
+  border-color: var(--color-sage-dark);
+}
+
+.game-list-row {
+  padding: 0.5rem;
+  border: 2px solid var(--color-frame-light);
+  border-radius: 1px;
+  background: var(--color-parchment-dark);
+}
+
+.game-loader {
+  width: 2rem;
+  height: 2rem;
+  border: 3px solid var(--color-frame-light);
+  border-top-color: var(--color-rose);
+  border-radius: 2px;
+  animation: game-loader-spin 0.8s steps(8) infinite;
+}
+
+@keyframes game-loader-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.care-btn-countdown {
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0;
+  margin-top: 0.125rem;
+  padding: 0.125rem 0.25rem;
+  border-radius: 1px;
+  background: var(--color-parchment);
+  border: 2px solid var(--color-frame);
+  box-shadow: 1px 1px 0 0 var(--color-frame-light);
+}
+
+.care-btn-countdown-label {
+  font-size: 0.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-ink-muted);
+  text-align: center;
+}
+
+.care-btn-countdown-time {
+  font-size: 0.625rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.care-btn-hint {
+  z-index: 2;
+  font-size: 0.5rem;
+  font-weight: 700;
+  line-height: 1.2;
+  text-align: center;
+  color: var(--color-ink);
+  padding: 0.125rem 0.25rem;
+  border-radius: 1px;
+  background: var(--color-parchment);
+  border: 2px solid var(--color-frame);
+}
+
+.game-tag {
+  display: inline-block;
+  padding: 0.125rem 0.375rem;
+  font-size: 0.5625rem;
+  font-weight: 700;
+  border: 2px solid var(--color-frame);
+  border-radius: 1px;
+  box-shadow: 1px 1px 0 0 var(--color-frame-light);
+  background: var(--color-lavender);
+}
+
+.game-log-scroll {
+  max-height: 5.5rem;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-frame) var(--color-parchment-dark);
+}
+
+.game-log-scroll::-webkit-scrollbar {
+  width: 8px;
+}
+
+.game-log-scroll::-webkit-scrollbar-track {
+  background: var(--color-parchment-dark);
+  border: 2px solid var(--color-frame);
+  border-radius: 0;
+}
+
+.game-log-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-frame-light);
+  border: 2px solid var(--color-frame);
+  border-radius: 0;
+  box-shadow: inset -1px -1px 0 rgba(107, 94, 84, 0.25);
+}
+
+.game-log-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--color-stone);
+}
+
+/* ─── Konuşma balonu ─── */
+.speech-bubble {
+  background: var(--color-parchment-light);
+  border: 2px solid var(--color-frame);
+  box-shadow: var(--shadow-step-sm);
+  border-radius: 2px;
+  padding: 0.375rem 0.5rem;
+}
+
+.speech-bubble-tail {
+  width: 8px;
+  height: 8px;
+  background: var(--color-parchment-light);
+  border-right: 2px solid var(--color-frame);
+  border-bottom: 2px solid var(--color-frame);
+  transform: rotate(45deg);
+  margin: -5px auto 0;
+}
+
+/* ─── Animasyonlar ─── */
+@keyframes mochi-idle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-3px);
+  }
+}
+
+@keyframes mochi-happy {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(-8px);
+  }
+  55% {
+    transform: translateY(-2px);
+  }
+  75% {
+    transform: translateY(-5px);
+  }
+}
+
+@keyframes mochi-bob {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes sparkle {
+  0%,
+  100% {
+    opacity: 0.2;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes bounce-happy {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(-10px);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+  75% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes gill-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.65;
+  }
+}
+
+@keyframes blink {
+  0%,
+  92%,
+  100% {
+    transform: scaleY(1);
+  }
+  96% {
+    transform: scaleY(0.08);
+  }
+}
+
+@keyframes yawn-stretch {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  40% {
+    transform: translateY(-2px);
+  }
+  55% {
+    transform: translateY(1px);
+  }
+}
+
+.animate-mochi-idle {
+  animation: mochi-idle 3.4s ease-in-out infinite;
+}
+
+.animate-mochi-happy {
+  animation: mochi-happy 0.55s ease-in-out;
+}
+
+.animate-mochi-bob {
+  animation: mochi-bob 2s ease-in-out infinite;
+}
+
+.animate-sparkle {
+  animation: sparkle 2s steps(2) infinite;
+}
+
+.animate-bounce-happy {
+  animation: bounce-happy 0.65s ease-in-out;
+}
+
+.animate-gill {
+  animation: gill-pulse 2.4s steps(3) infinite;
+}
+
+.animate-blink {
+  animation: blink 4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.animate-yawn {
+  animation: yawn-stretch 4s ease-in-out infinite;
+}
+
+.safe-area {
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
