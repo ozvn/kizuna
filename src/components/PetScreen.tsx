@@ -100,7 +100,7 @@ export default function PetScreen() {
 
     if (error) {
       console.error(error);
-      setActionError(formatSupabaseError(error.message));
+      setActionError(formatSupabaseError(error));
       setOptimisticUntil((prev) => {
         const next = { ...prev };
         delete next[action];

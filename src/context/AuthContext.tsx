@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     if (error) {
       console.error('profile fetch:', error);
-      setProfileError(formatSupabaseError(error.message));
+      setProfileError(formatSupabaseError(error));
       setProfile(null);
       setPartner(null);
       return;
@@ -57,7 +57,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         console.error('ensure profile:', ensureError);
         setProfileError(
           ensureError
-            ? formatSupabaseError(ensureError.message)
+            ? formatSupabaseError(ensureError)
             : 'Profil oluşturulamadı. Supabase\'de fix_missing_profiles.sql dosyasını çalıştırın.',
         );
         setProfile(null);
@@ -151,7 +151,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .maybeSingle();
 
     if (lookupError) {
-      return { error: formatSupabaseError(lookupError.message), needsConfirmation: false };
+      return { error: formatSupabaseError(lookupError), needsConfirmation: false };
     }
 
     if (existing) {
@@ -167,7 +167,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       },
     });
 
-    if (error) return { error: formatSupabaseError(error.message), needsConfirmation: false };
+    if (error) return { error: formatSupabaseError(error), needsConfirmation: false };
 
     const needsConfirmation = data.user !== null && data.session === null;
     return { error: null, needsConfirmation };
@@ -185,7 +185,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       if (lookupError) {
         console.error('get_email_for_login:', lookupError);
-        return { error: formatSupabaseError(lookupError.message) };
+        return { error: formatSupabaseError(lookupError) };
       }
 
       if (!data) {
@@ -202,7 +202,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       if (msg.includes('invalid login') || msg.includes('invalid credentials')) {
         return { error: 'Kullanıcı adı veya şifre hatalı' };
       }
-      return { error: formatSupabaseError(error.message) };
+      return { error: formatSupabaseError(error) };
     }
 
     return { error: null };
@@ -214,7 +214,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       email,
       options: { emailRedirectTo: getAuthRedirectUrl() },
     });
-    return { error: error ? formatSupabaseError(error.message) : null };
+    return { error: error ? formatSupabaseError(error) : null };
   };
 
   const signOut = async () => {

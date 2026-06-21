@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
+import { formatSupabaseError } from '../lib/supabaseErrors';
 import type { PetRitualState } from '../types';
 
 export function usePetRitualState(petId: string | null | undefined) {
@@ -20,7 +21,7 @@ export function usePetRitualState(petId: string | null | undefined) {
 
     if (rpcError) {
       console.error('ritual sync:', rpcError);
-      setError(rpcError.message);
+      setError(formatSupabaseError(rpcError));
     } else {
       setState(data as PetRitualState);
       setError(null);

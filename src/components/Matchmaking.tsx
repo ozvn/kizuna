@@ -27,7 +27,7 @@ export default function Matchmaking() {
 
     if (sentError) {
       console.error('sent requests:', sentError);
-      setError(formatSupabaseError(sentError.message));
+      setError(formatSupabaseError(sentError));
       return;
     }
 
@@ -40,7 +40,7 @@ export default function Matchmaking() {
 
     if (incomingError) {
       console.error('incoming requests:', incomingError);
-      setError(formatSupabaseError(incomingError.message));
+      setError(formatSupabaseError(incomingError));
       return;
     }
 
@@ -123,12 +123,7 @@ export default function Matchmaking() {
 
     if (rpcError) {
       console.error('match send:', rpcError);
-      const msg = rpcError.message.toLowerCase();
-      setError(
-        rpcError.code === '23505' || msg.includes('unique')
-          ? 'Bu kullanıcıya zaten istek gönderdiniz'
-          : formatSupabaseError(rpcError.message),
-      );
+      setError(formatSupabaseError(rpcError));
     } else {
       setTargetUsername('');
       await fetchRequests();
@@ -146,7 +141,7 @@ export default function Matchmaking() {
     });
 
     if (rpcError) {
-      setError(formatSupabaseError(rpcError.message));
+      setError(formatSupabaseError(rpcError));
     } else {
       await refreshProfile();
     }
