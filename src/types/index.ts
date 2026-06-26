@@ -126,7 +126,25 @@ export interface PetSocialState {
   friends: PetFriendSummary[];
   outgoing_request: FriendRequestInfo | null;
   incoming_request: FriendRequestInfo | null;
+  pending_friend_play: PendingFriendPlay | null;
   owner_ids: string[];
+}
+
+export interface PendingFriendPlay {
+  id: string;
+  pet_a_id: string;
+  pet_b_id: string;
+  pet_a_name: string;
+  pet_b_name: string;
+  friend_pet_id: string;
+  friend_pet_name: string;
+  initiated_by: string;
+  approvals: string[];
+  approval_count: number;
+  required_approvals: number;
+  needs_my_approval: boolean;
+  i_initiated: boolean;
+  expires_at: string;
 }
 
 export const MOCHI_PHRASES = [

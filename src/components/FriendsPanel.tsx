@@ -1,7 +1,11 @@
 import { FormEvent, useState } from 'react';
-import { Heart, Loader2, Send, UserPlus } from 'lucide-react';
+import { Gamepad2, Heart, Loader2, Send, UserPlus } from 'lucide-react';
 import { supabase } from '../lib/supabase';
 import { formatSupabaseError } from '../lib/supabaseErrors';
+import {
+  FRIEND_PLAY_ENERGY_BOOST,
+  FRIEND_PLAY_XP,
+} from '../lib/ritualConfig';
 import GamePanel from './GamePanel';
 import type { FriendRequestInfo, PetSocialState } from '../types';
 
@@ -11,10 +15,11 @@ interface FriendsPanelProps {
   error: string | null;
   partnerUsername?: string | null;
   onRefresh: () => void;
+  onPetUpdated?: () => void;
 }
 
 function approvalLabel(approved: number, required: number): string {
-  return `${approved}/${required} partners approved`;
+  return `${approved}/${required} owners approved`;
 }
 
 function RequestCard({
@@ -86,10 +91,19 @@ export default function FriendsPanel({
   error,
   partnerUsername,
   onRefresh,
+  onPetUpdated,
 }: FriendsPanelProps) {
   const [targetName, setTargetName] = useState('');
   const [actionError, setActionError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+
+  const pendingPlay = social?.pending_friend_play;
+  const hasFriends = (social?.friends?.length ?? 0) > 0;
+
+  const afterSocialAction = async (completedPlay = false) => {
+    await onRefresh();
+    if (completedPlay) onPetUpdated?.();
+  };
 
   const handleSend = async (e: FormEvent) => {
     e.preventDefault();
@@ -143,8 +157,151 @@ export default function FriendsPanel({
     setBusy(false);
   };
 
+  const startFriendPlay = async (friendPetId: string) => {
+    setBusy(true);
+    setActionError(null);
+    const { data, error: rpcError } = await supabase.rpc('initiate_friend_play', {
+      p_friend_pet_id: friendPetId,
+    });
+    if (rpcError) {
+      setActionError(formatSupabaseError(rpcError));
+    } else {
+      const state = data as PetSocialState | null;
+      await onRefresh();
+      if (!state?.pending_friend_play) onPetUpdated?.();
+    }
+    setBusy(false);
+  };
+
+  const approveFriendPlay = async (sessionId: string) => {
+    setBusy(true);
+    setActionError(null);
+    const { data, error: rpcError } = await supabase.rpc('confirm_friend_play', {
+      p_session_id: sessionId,
+    });
+    if (rpcError) {
+      setActionError(formatSupabaseError(rpcError));
+    } else {
+      const state = data as PetSocialState | null;
+      const wasPending = !!pendingPlay;
+      await afterSocialAction(wasPending && !state?.pending_friend_play);
+    }
+    setBusy(false);
+  };
+
+  const declineFriendPlay = async (sessionId: string) => {
+    setBusy(true);
+    setActionError(null);
+    const { error: rpcError } = await supabase.rpc('decline_friend_play', {
+      p_session_id: sessionId,
+    });
+    if (rpcError) setActionError(formatSupabaseError(rpcError));
+    else await onRefresh();
+    setBusy(false);
+  };
+
   return (
     <div className="space-y-2 w-full">
+      <GamePanel className="w-full">
+        <div className="space-y-2">
+          <div className="flex items-center gap-1 pb-1 border-b-2 border-frame-light border-dashed">
+            <Gamepad2 className="w-3.5 h-3.5 text-mint" />
+            <h3 className="text-[10px] font-bold text-ink text-stroke-soft">Play with Friend</h3>
+          </div>
+
+          <p className="text-[8px] text-ink-muted font-semibold leading-snug">
+            All 4 owners must approve. When complete: +{FRIEND_PLAY_ENERGY_BOOST} energy and +
+            {FRIEND_PLAY_XP} XP for both pets.
+          </p>
+
+          {loading && (
+            <div className="flex justify-center py-2">
+              <Loader2 className="w-4 h-4 animate-spin text-ink-muted" />
+            </div>
+          )}
+
+          {!loading && pendingPlay && (
+            <div className="game-list-row space-y-1.5">
+              <p className="text-[9px] font-bold text-ink text-stroke-soft">Pending play session</p>
+              <p className="text-[10px] font-bold text-sky-dark">
+                {pendingPlay.pet_a_name} &amp; {pendingPlay.pet_b_name}
+              </p>
+              <p className="text-[8px] text-ink-muted font-semibold">
+                {approvalLabel(
+                  pendingPlay.approval_count,
+                  pendingPlay.required_approvals,
+                )}
+              </p>
+              {pendingPlay.i_initiated && !pendingPlay.needs_my_approval && (
+                <p className="text-[8px] text-ink-muted font-semibold">
+                  Waiting for all owners to approve…
+                </p>
+              )}
+              <div className="flex gap-1 pt-0.5">
+                {pendingPlay.needs_my_approval && (
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => approveFriendPlay(pendingPlay.id)}
+                    className="pixel-btn flex-1 py-1.5 text-[8px] font-bold bg-mint text-ink"
+                  >
+                    {busy ? (
+                      <Loader2 className="w-3 h-3 animate-spin mx-auto" />
+                    ) : (
+                      'Approve Play'
+                    )}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  disabled={busy}
+                  onClick={() => declineFriendPlay(pendingPlay.id)}
+                  className="pixel-btn flex-1 py-1.5 text-[8px] font-bold bg-peach text-ink"
+                >
+                  Decline
+                </button>
+              </div>
+            </div>
+          )}
+
+          {!loading && !pendingPlay && !hasFriends && (
+            <p className="text-[9px] text-ink-muted font-semibold py-1">
+              Add a friend first to play together.
+            </p>
+          )}
+
+          {!loading && !pendingPlay && hasFriends && (
+            <ul className="space-y-1">
+              {social!.friends.map((f) => (
+                <li
+                  key={f.pet_id}
+                  className="game-list-row flex items-center justify-between gap-2"
+                >
+                  <div className="min-w-0">
+                    <p className="text-[10px] font-bold text-ink truncate">{f.pet_name}</p>
+                    <p className="text-[8px] text-ink-muted font-semibold">
+                      Lv.{f.level} · 🔥{f.care_streak}
+                    </p>
+                  </div>
+                  <button
+                    type="button"
+                    disabled={busy}
+                    onClick={() => startFriendPlay(f.pet_id)}
+                    className="pixel-btn px-2 py-1 text-[8px] font-bold bg-lavender shrink-0"
+                  >
+                    {busy ? (
+                      <Loader2 className="w-3 h-3 animate-spin" />
+                    ) : (
+                      'Play'
+                    )}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </GamePanel>
+
       <GamePanel className="w-full">
         <div className="space-y-2">
           <div className="flex items-center gap-1 pb-1 border-b-2 border-frame-light border-dashed">
@@ -222,7 +379,7 @@ export default function FriendsPanel({
             <h3 className="text-[10px] font-bold text-ink text-stroke-soft">Pet Friends</h3>
           </div>
 
-          {!loading && (!social?.friends || social.friends.length === 0) && (
+          {!loading && !hasFriends && (
             <p className="text-[9px] text-ink-muted font-semibold">No friends yet.</p>
           )}
 

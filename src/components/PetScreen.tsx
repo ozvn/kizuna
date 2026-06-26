@@ -281,6 +281,7 @@ export default function PetScreen() {
               error={social.error}
               partnerUsername={partner?.username}
               onRefresh={social.refresh}
+              onPetUpdated={refreshAll}
             />
           )}
         </div>

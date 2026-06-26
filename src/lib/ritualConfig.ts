@@ -15,6 +15,10 @@ export const ENERGY_REGEN_PER_HOUR = 5;
 export const ENERGY_PLAY_COST = 20;
 export const ENERGY_PLAY_MIN = 12;
 
+export const FRIEND_PLAY_ENERGY_BOOST = 25;
+export const FRIEND_PLAY_XP = 8;
+export const FRIEND_PLAY_COOLDOWN_HOURS = 24;
+
 export const NEGLECT_HOURS = 36;
 export const HUNGRY_HOURS = 10;
 

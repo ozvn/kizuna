@@ -49,6 +49,11 @@ export function usePetSocial(petId: string | null | undefined) {
         { event: '*', schema: 'public', table: 'pet_friendships' },
         () => refresh(),
       )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'friend_play_sessions' },
+        () => refresh(),
+      )
       .subscribe();
 
     return () => {

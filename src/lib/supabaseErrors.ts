@@ -57,6 +57,17 @@ const KNOWN_USER_MESSAGES = new Set([
   'A friend request is already pending',
   'Pet name must be at least 2 characters',
   'You do not have a pet yet',
+  'You cannot play with your own pet',
+  'You are not friends with this pet',
+  'Friend play is on cooldown. Try again later.',
+  'This friend pet is on play cooldown',
+  'A friend play session is already pending',
+  'Friend play session not found',
+  'This friend play session is no longer pending',
+  'Friend play session expired',
+  'You do not have access to this session',
+  'You already approved this session',
+  'Both pets need matched couples to play together',
   'Friend request not found',
   'This request is not awaiting sender approval',
   'This request is not awaiting receiver approval',
@@ -117,6 +128,13 @@ function formatMissingFunction(fullText: string): string {
     fullText.includes('initiate_pet_friend_request')
   ) {
     return 'Leaderboard & friends need an update. Admin: run leaderboard_and_friends.sql.';
+  }
+  if (
+    fullText.includes('initiate_friend_play') ||
+    fullText.includes('confirm_friend_play') ||
+    fullText.includes('decline_friend_play')
+  ) {
+    return 'Friend play needs an update. Admin: run friend_play.sql.';
   }
   return 'Server configuration is incomplete. Please try again later.';
 }

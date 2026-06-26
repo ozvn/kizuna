@@ -468,3 +468,6 @@ END $$;
 
 -- ─── Leaderboard + pet friendships ───
 -- Kurulum: supabase/migrations/leaderboard_and_friends.sql dosyasını SQL Editor'de çalıştırın.
+
+-- ─── Friend play (4-owner approval) ───
+-- Kurulum: supabase/migrations/friend_play.sql dosyasını SQL Editor'de çalıştırın.
