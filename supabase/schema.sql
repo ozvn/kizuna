@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS public.pets (
     daily_xp_earned INTEGER NOT NULL DEFAULT 0,
     daily_xp_date DATE,
     neglect_decay_at TIMESTAMPTZ,
+    last_energy_tick TIMESTAMPTZ DEFAULT timezone('utc'::text, now()),
     created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
 );
 
@@ -269,6 +270,71 @@ CREATE POLICY "Pet sahipleri ortak ritüelleri görebilir" ON public.joint_ritua
       WHERE profiles.id = auth.uid() AND profiles.pet_id = joint_rituals.pet_id
     )
   );
+
+-- Eşleşme isteği gönder (pet adı ile)
+DROP FUNCTION IF EXISTS public.send_match_request(text);
+DROP FUNCTION IF EXISTS public.send_match_request(text, text);
+
+CREATE OR REPLACE FUNCTION public.send_match_request(
+  p_receiver_username text,
+  p_proposed_pet_name text
+)
+RETURNS uuid
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  uid uuid := auth.uid();
+  clean_receiver text;
+  clean_name text;
+  new_id uuid;
+BEGIN
+  IF uid IS NULL THEN
+    RAISE EXCEPTION 'Oturum açık değil';
+  END IF;
+
+  clean_receiver := lower(trim(p_receiver_username));
+  clean_name := trim(p_proposed_pet_name);
+
+  IF clean_receiver = '' THEN
+    RAISE EXCEPTION 'Alıcı kullanıcı adı gerekli';
+  END IF;
+
+  IF length(clean_name) < 2 OR length(clean_name) > 50 THEN
+    RAISE EXCEPTION 'Pet adı 2-50 karakter olmalı';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM public.profiles WHERE id = uid AND lower(username) = clean_receiver
+  ) THEN
+    RAISE EXCEPTION 'Kendinize istek gönderemezsiniz';
+  END IF;
+
+  IF NOT EXISTS (
+    SELECT 1 FROM public.profiles WHERE lower(username) = clean_receiver
+  ) THEN
+    RAISE EXCEPTION 'Kullanıcı bulunamadı';
+  END IF;
+
+  IF EXISTS (
+    SELECT 1 FROM public.profiles WHERE id = uid AND partner_id IS NOT NULL
+  ) THEN
+    RAISE EXCEPTION 'Zaten bir partneriniz var';
+  END IF;
+
+  INSERT INTO public.match_requests (sender_id, receiver_username, proposed_pet_name, status)
+  SELECT uid, p.username, clean_name, 'pending'
+  FROM public.profiles p
+  WHERE lower(p.username) = clean_receiver
+  RETURNING id INTO new_id;
+
+  RETURN new_id;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.send_match_request(text, text) FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION public.send_match_request(text, text) TO authenticated;
 
 -- Eşleşme kabul atomik işlemi
 CREATE OR REPLACE FUNCTION public.accept_match_request(request_id UUID)

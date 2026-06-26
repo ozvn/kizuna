@@ -11,6 +11,9 @@ ALTER TABLE public.match_requests
   ADD CONSTRAINT match_requests_pet_name_length
   CHECK (char_length(trim(proposed_pet_name)) BETWEEN 2 AND 50);
 
+DROP FUNCTION IF EXISTS public.send_match_request(text);
+DROP FUNCTION IF EXISTS public.send_match_request(text, text);
+
 CREATE OR REPLACE FUNCTION public.send_match_request(
   p_receiver_username text,
   p_proposed_pet_name text

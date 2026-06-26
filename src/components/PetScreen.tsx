@@ -35,7 +35,7 @@ export default function PetScreen() {
   const [actionError, setActionError] = useState<string | null>(null);
   const [optimisticUntil, setOptimisticUntil] = useState<Partial<Record<CareAction, number>>>({});
 
-  const cooldowns = useActionCooldowns(ritualState, optimisticUntil);
+  const cooldowns = useActionCooldowns(ritualState, optimisticUntil, pet?.energy);
   const { muted, toggle: toggleSound } = useSoundMuted();
 
   const bg = getTimeOfDayBackground();
@@ -68,6 +68,18 @@ export default function PetScreen() {
   const refreshAll = useCallback(async () => {
     await Promise.all([refreshPet(), refreshRitual()]);
   }, [refreshPet, refreshRitual]);
+
+  // Pasif enerji yenilenmesi için periyodik senkron
+  useEffect(() => {
+    if (!pet?.id) return;
+
+    const tick = () => {
+      void refreshAll();
+    };
+
+    const interval = setInterval(tick, 60_000);
+    return () => clearInterval(interval);
+  }, [pet?.id, refreshAll]);
 
   const handleAction = async (action: CareAction) => {
     if (!pet || !profile || actionLoading) return;

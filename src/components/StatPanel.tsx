@@ -1,7 +1,9 @@
-import { Sparkles, Zap } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import ProgressBar from './ProgressBar';
 import GamePanel from './GamePanel';
 import { statConfig } from '../lib/theme';
+import { ENERGY_MAX, ENERGY_REGEN_PER_HOUR, ENERGY_PLAY_MIN } from '../lib/ritualConfig';
+import { xpForLevel } from '../lib/gameUtils';
 import StreakBadge from './StreakBadge';
 import type { Pet } from '../types';
 
@@ -22,6 +24,14 @@ export default function StatPanel({
   dailyXpEarned = 0,
   dailyXpCap = 8,
 }: StatPanelProps) {
+  const xpNeeded = xpForLevel(pet.level);
+  const energyHint =
+    pet.energy < ENERGY_PLAY_MIN
+      ? `Düşük enerji — saat başı +${ENERGY_REGEN_PER_HOUR} dinlenme, besleme +15`
+      : pet.energy < 40
+        ? `Saat başı +${ENERGY_REGEN_PER_HOUR} enerji yenilenir`
+        : undefined;
+
   return (
     <GamePanel className="w-full">
       <div className="space-y-2">
@@ -34,6 +44,15 @@ export default function StatPanel({
         </div>
 
         <StreakBadge streak={careStreak} dailyXpEarned={dailyXpEarned} dailyXpCap={dailyXpCap} />
+
+        <ProgressBar
+          label={`Seviye ${pet.level}`}
+          value={pet.xp}
+          max={xpNeeded}
+          icon="⭐"
+          variant="xp"
+          valueLabel={`${pet.xp}/${xpNeeded} XP`}
+        />
 
         <ProgressBar
           label={statConfig.hunger.label}
@@ -56,15 +75,14 @@ export default function StatPanel({
         <ProgressBar
           label={statConfig.energy.label}
           value={pet.energy}
+          max={ENERGY_MAX}
           icon={statConfig.energy.icon}
           variant="energy"
+          valueLabel={`${Math.round(pet.energy)}/${ENERGY_MAX}`}
+          hint={energyHint}
         />
 
-        <div className="flex justify-between text-[9px] font-bold text-ink-muted pt-0.5 text-stroke-soft">
-          <span className="flex items-center gap-0.5">
-            <Zap className="w-3 h-3 text-sky" />
-            XP {pet.xp}/{pet.level * 50}
-          </span>
+        <div className="flex justify-end text-[9px] font-bold text-ink-muted pt-0.5 text-stroke-soft">
           <span>Ruh ✦ {pet.spirit_points}</span>
         </div>
       </div>

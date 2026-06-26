@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import type { CareAction, PetRitualState } from '../types';
-import { ACTION_COOLDOWN_LABEL } from '../lib/ritualConfig';
+import { ACTION_COOLDOWN_LABEL, ENERGY_PLAY_MIN } from '../lib/ritualConfig';
 import {
   formatCountdown,
   getActionLastAt,
@@ -23,6 +23,7 @@ export interface ActionAvailability {
 export function useActionCooldowns(
   ritualState: PetRitualState | null,
   optimisticUntil: Partial<Record<CareAction, number>> = {},
+  petEnergy?: number,
 ): Record<CareAction, ActionAvailability> {
   const now = useNow();
 
@@ -45,6 +46,8 @@ export function useActionCooldowns(
         play: empty('play'),
       };
     }
+
+    const energy = ritualState.energy ?? petEnergy ?? ENERGY_PLAY_MIN;
 
     const build = (action: CareAction): ActionAvailability => {
       const lastAt = getActionLastAt(action, ritualState);
@@ -86,6 +89,18 @@ export function useActionCooldowns(
         }
       }
 
+      if (action === 'play' && energy < ENERGY_PLAY_MIN) {
+        return {
+          action,
+          available: false,
+          locked: true,
+          countdownMs: 0,
+          countdownLabel: ACTION_COOLDOWN_LABEL.play,
+          countdownText: null,
+          hintText: 'Enerji düşük',
+        };
+      }
+
       if (onCooldown) {
         return {
           action,
@@ -115,5 +130,5 @@ export function useActionCooldowns(
       pet: build('pet'),
       play: build('play'),
     };
-  }, [ritualState, now, optimisticUntil]);
+  }, [ritualState, now, optimisticUntil, petEnergy]);
 }

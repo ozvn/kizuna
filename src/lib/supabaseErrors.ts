@@ -24,6 +24,7 @@ const KNOWN_USER_MESSAGES = new Set([
   'Bekleyen ritüel bulunamadı',
   'Kendi başlattığın ritüeli sen onaylayamazsın',
   'Ritüel süresi doldu',
+  'Enerji yetersiz. Besle veya dinlenerek enerji topla.',
   'Bu kullanıcı adı zaten alınmış.',
   'Kullanıcı adı veya şifre hatalı',
   'Bu kullanıcıya zaten istek gönderdiniz',

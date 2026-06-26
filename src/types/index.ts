@@ -50,6 +50,8 @@ export interface PetRitualState {
   care_streak: number;
   daily_xp_earned: number;
   daily_xp_cap: number;
+  energy?: number;
+  energy_regen_per_hour?: number;
   pending_joint_play: PendingJointPlay | null;
 }
 

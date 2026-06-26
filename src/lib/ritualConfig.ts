@@ -10,6 +10,11 @@ export const COOLDOWN_HOURS: Record<CareAction, number> = {
 
 export const DAILY_XP_CAP = 8;
 
+export const ENERGY_MAX = 100;
+export const ENERGY_REGEN_PER_HOUR = 5;
+export const ENERGY_PLAY_COST = 20;
+export const ENERGY_PLAY_MIN = 12;
+
 export const NEGLECT_HOURS = 36;
 export const HUNGRY_HOURS = 10;
 

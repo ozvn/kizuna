@@ -288,6 +288,14 @@ canvas,
   );
 }
 
+.stat-fill-xp {
+  background: repeating-linear-gradient(
+    90deg,
+    #f0d890 0 4px,
+    #e8c060 4px 8px
+  );
+}
+
 /* ─── Bakım butonları ─── */
 .care-btn {
   display: flex;
