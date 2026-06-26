@@ -10,23 +10,24 @@ export default function SetupRequired() {
         <div className="pixel-card-inner p-5 space-y-3">
           <div className="flex items-center justify-center gap-2 pb-2 border-b-2 border-frame-light border-dashed">
             <Settings className="w-4 h-4 text-lavender-dark" />
-            <h1 className="font-pixel text-[8px] text-ink text-stroke-title">Supabase Kurulumu</h1>
+            <h1 className="font-pixel text-[8px] text-ink text-stroke-title">Supabase Setup</h1>
           </div>
 
           <p className="text-[10px] leading-relaxed text-ink-muted font-semibold">
-            Uygulama başlatılamadı çünkü{' '}
+            The app could not start because{' '}
             <code className="text-[9px] bg-parchment-dark px-1 border border-frame-light">.env</code>{' '}
-            dosyasında geçerli Supabase bilgileri yok. Şu anki URL:{' '}
+            is missing valid Supabase credentials. Current URL:{' '}
             <span className="text-coral-dark font-bold">{hint.url}</span>
           </p>
 
           <div className="game-panel">
             <div className="game-panel-inner space-y-2 text-[10px] leading-relaxed font-semibold">
               <p className="flex items-center gap-1 font-bold text-ink">
-                <Database className="w-3 h-3" /> Adımlar:
+                <Database className="w-3 h-3" /> Steps:
               </p>
               <ol className="list-decimal list-inside space-y-1 ml-1 text-ink-muted">
                 <li>
+                  Create a project at{' '}
                   <a
                     href="https://supabase.com"
                     target="_blank"
@@ -34,15 +35,14 @@ export default function SetupRequired() {
                     className="text-sky-dark underline"
                   >
                     supabase.com
-                  </a>{' '}
-                  üzerinde proje oluştur
+                  </a>
                 </li>
                 <li>
-                  SQL Editor&apos;de <code>supabase/schema.sql</code> dosyasını çalıştır
+                  Run <code>supabase/schema.sql</code> in the SQL Editor
                 </li>
-                <li>Project Settings → API&apos;den URL ve anon key&apos;i kopyala</li>
+                <li>Copy the URL and anon key from Project Settings → API</li>
                 <li>
-                  Proje kökündeki <code>.env</code> dosyasını düzenle:
+                  Edit the <code>.env</code> file in the project root:
                 </li>
               </ol>
               <pre className="mt-1 p-2 bg-ink text-mint text-[9px] overflow-x-auto whitespace-pre-wrap border-2 border-frame">
@@ -50,7 +50,7 @@ export default function SetupRequired() {
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIs...`}
               </pre>
               <p>
-                Dev sunucusunu yeniden başlat: <code>npm run dev</code>
+                Restart the dev server: <code>npm run dev</code>
               </p>
             </div>
           </div>

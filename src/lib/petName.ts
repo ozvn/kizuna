@@ -9,10 +9,10 @@ export function validatePetName(raw: string): { ok: true; name: string } | { ok:
   const name = normalizePetName(raw);
 
   if (name.length < MIN_LENGTH) {
-    return { ok: false, error: `Pet adı en az ${MIN_LENGTH} karakter olmalı` };
+    return { ok: false, error: `Pet name must be at least ${MIN_LENGTH} characters` };
   }
   if (name.length > MAX_LENGTH) {
-    return { ok: false, error: `Pet adı en fazla ${MAX_LENGTH} karakter olabilir` };
+    return { ok: false, error: `Pet name must be at most ${MAX_LENGTH} characters` };
   }
 
   return { ok: true, name };

@@ -39,12 +39,12 @@ export default function Auth() {
       if (err) {
         setError(err);
       } else if (needsConfirmation && EMAIL_CONFIRMATION_ENABLED) {
-        setSuccess('Kayıt başarılı! E-postandaki linke tıkla, ardından giriş yap.');
+        setSuccess('Account created! Check your email, then sign in.');
         setShowResend(true);
         setLoginIdentifier(email);
         setMode('login');
       } else {
-        setSuccess('Kayıt başarılı! Şimdi giriş yapabilirsin.');
+        setSuccess('Account created! You can sign in now.');
         setLoginIdentifier(username || email);
         setMode('login');
       }
@@ -54,7 +54,7 @@ export default function Auth() {
         setError(err);
         if (
           EMAIL_CONFIRMATION_ENABLED &&
-          (err.includes('doğrulanmamış') || err.includes('confirm'))
+          (err.toLowerCase().includes('verified') || err.includes('confirm'))
         ) {
           setShowResend(true);
         }
@@ -67,14 +67,14 @@ export default function Auth() {
   const handleResend = async () => {
     const targetEmail = loginIdentifier.includes('@') ? loginIdentifier : email;
     if (!targetEmail || !targetEmail.includes('@')) {
-      setError('Doğrulama maili için e-posta adresini gir.');
+      setError('Enter your email address for the verification email.');
       return;
     }
     setLoading(true);
     setError(null);
     const { error: err } = await resendConfirmation(targetEmail);
     if (err) setError(err);
-    else setSuccess('Yeni doğrulama e-postası gönderildi.');
+    else setSuccess('A new verification email was sent.');
     setLoading(false);
   };
 
@@ -88,15 +88,15 @@ export default function Auth() {
           </div>
 
           <p className="text-[10px] text-center text-ink-muted font-bold leading-relaxed text-stroke-soft">
-            Ortak sanal pet deneyimi
+            A shared virtual pet experience
             <br />
-            Petinizi birlikte büyütün
+            Raise your pet together
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-3">
             {mode === 'register' && (
               <div>
-                <label className="text-[10px] font-bold block mb-1 text-ink">Kullanıcı Adı</label>
+                <label className="text-[10px] font-bold block mb-1 text-ink">Username</label>
                 <input
                   type="text"
                   value={username}
@@ -113,7 +113,7 @@ export default function Auth() {
             {mode === 'login' ? (
               <div>
                 <label className="text-[10px] font-bold block mb-1 text-ink">
-                  E-posta veya Kullanıcı Adı
+                  Email or Username
                 </label>
                 <input
                   type="text"
@@ -126,7 +126,7 @@ export default function Auth() {
               </div>
             ) : (
               <div>
-                <label className="text-[10px] font-bold block mb-1 text-ink">E-posta</label>
+                <label className="text-[10px] font-bold block mb-1 text-ink">Email</label>
                 <input
                   type="email"
                   value={email}
@@ -139,7 +139,7 @@ export default function Auth() {
             )}
 
             <div>
-              <label className="text-[10px] font-bold block mb-1 text-ink">Şifre</label>
+              <label className="text-[10px] font-bold block mb-1 text-ink">Password</label>
               <input
                 type="password"
                 value={password}
@@ -162,11 +162,11 @@ export default function Auth() {
             >
               {mode === 'login' ? (
                 <>
-                  <LogIn className="w-3.5 h-3.5" /> Giriş Yap
+                  <LogIn className="w-3.5 h-3.5" /> Sign In
                 </>
               ) : (
                 <>
-                  <UserPlus className="w-3.5 h-3.5" /> Kayıt Ol
+                  <UserPlus className="w-3.5 h-3.5" /> Sign Up
                 </>
               )}
             </button>
@@ -180,7 +180,7 @@ export default function Auth() {
               className="pixel-btn w-full py-2 text-[9px] font-bold bg-sky text-ink flex items-center justify-center gap-1.5"
             >
               <Mail className="w-3 h-3" />
-              Doğrulama e-postasını tekrar gönder
+              Resend verification email
             </button>
           )}
 
@@ -194,11 +194,11 @@ export default function Auth() {
             }}
             className="w-full text-[9px] font-bold text-ink-muted hover:text-ink underline underline-offset-2"
           >
-            {mode === 'login' ? 'Hesabın yok mu? Kayıt ol' : 'Zaten hesabın var mı? Giriş yap'}
+            {mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
           </button>
 
           <p className="text-[8px] text-center text-ink-muted font-semibold pt-1 border-t-2 border-frame-light border-dashed">
-            Bu oyun Kumsal için yapılmıştır
+            Made with love for Kumsal
           </p>
         </div>
       </div>

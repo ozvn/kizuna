@@ -505,6 +505,144 @@ canvas,
   background: var(--color-lavender);
 }
 
+/* ─── Bakım serisi paneli ─── */
+.streak-panel {
+  background: var(--color-frame);
+  padding: 2px;
+  border-radius: 2px;
+  box-shadow: var(--shadow-step-sm);
+}
+
+.streak-panel-inner {
+  background: linear-gradient(180deg, #fff5eb 0%, var(--color-peach) 100%);
+  border: 1px solid var(--color-coral-dark);
+  border-radius: 1px;
+  padding: 0.5rem 0.625rem;
+}
+
+.streak-hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.streak-hero-left {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+  min-width: 0;
+}
+
+.streak-flame {
+  font-size: 1.75rem;
+  line-height: 1;
+  filter: drop-shadow(1px 1px 0 rgba(107, 94, 84, 0.25));
+}
+
+.streak-hero-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  line-height: 1;
+}
+
+.streak-count {
+  font-size: 1.125rem;
+  color: var(--color-ink);
+  text-shadow: 2px 2px 0 var(--color-frame-light);
+  line-height: 1.1;
+}
+
+.streak-label {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: var(--color-ink-muted);
+  text-transform: lowercase;
+  letter-spacing: 0.02em;
+}
+
+.streak-multiplier-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 3.25rem;
+  padding: 0.25rem 0.5rem;
+  background: var(--color-parchment-light);
+  border: 2px solid var(--color-frame);
+  border-radius: 2px;
+  box-shadow: 2px 2px 0 0 var(--color-coral-dark);
+}
+
+.streak-multiplier-label {
+  font-size: 0.5rem;
+  font-weight: 800;
+  color: var(--color-ink-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  line-height: 1.2;
+}
+
+.streak-multiplier {
+  font-size: 0.875rem;
+  color: var(--color-coral-dark);
+  line-height: 1.2;
+  text-shadow: 1px 1px 0 var(--color-peach-dark);
+}
+
+.streak-daily {
+  margin-bottom: 0.375rem;
+}
+
+.streak-daily-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.25rem;
+}
+
+.streak-daily-title {
+  font-size: 0.625rem;
+  font-weight: 800;
+  color: var(--color-ink);
+}
+
+.streak-daily-value {
+  font-size: 0.6875rem;
+  font-weight: 800;
+  color: var(--color-ink-muted);
+}
+
+.streak-daily-track {
+  height: 8px;
+}
+
+.streak-milestone {
+  margin: 0;
+  padding-top: 0.375rem;
+  border-top: 2px dashed var(--color-coral-dark);
+  font-size: 0.5625rem;
+  font-weight: 700;
+  color: var(--color-ink-muted);
+  line-height: 1.35;
+  text-align: center;
+}
+
+.streak-milestone-icon {
+  color: var(--color-gold);
+  margin-right: 0.125rem;
+}
+
+.streak-milestone-name {
+  color: var(--color-ink);
+}
+
+.streak-milestone-max {
+  color: var(--color-sage-dark);
+}
+
 .game-log-scroll {
   max-height: 5.5rem;
   overflow-y: auto;

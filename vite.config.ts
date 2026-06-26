@@ -13,7 +13,7 @@ export default defineConfig({
       manifest: {
         name: 'Kizuna',
         short_name: 'Kizuna',
-        description: 'Gerçek zamanlı ortak sanal pet büyüme oyunu.',
+        description: 'Real-time shared virtual pet game.',
         theme_color: '#EFE9E1',
         background_color: '#EFE9E1',
         display: 'standalone',

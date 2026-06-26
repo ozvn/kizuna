@@ -62,7 +62,7 @@ export default function CareActionButton({
           <span className="care-btn-emoji">{emoji}</span>
         )}
         <span className="text-[9px] font-bold leading-tight text-stroke-soft">
-          {confirmMode ? 'Onayla' : label}
+          {confirmMode ? 'Confirm' : label}
         </span>
       </span>
 

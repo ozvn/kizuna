@@ -27,9 +27,9 @@ export default function StatPanel({
   const xpNeeded = xpForLevel(pet.level);
   const energyHint =
     pet.energy < ENERGY_PLAY_MIN
-      ? `Düşük enerji — saat başı +${ENERGY_REGEN_PER_HOUR} dinlenme, besleme +15`
+      ? `Low energy — +${ENERGY_REGEN_PER_HOUR}/hr rest, feed +15`
       : pet.energy < 40
-        ? `Saat başı +${ENERGY_REGEN_PER_HOUR} enerji yenilenir`
+        ? `+${ENERGY_REGEN_PER_HOUR} energy per hour while resting`
         : undefined;
 
   return (
@@ -43,10 +43,13 @@ export default function StatPanel({
           <span className="game-tag text-ink">{rarityLabel}</span>
         </div>
 
-        <StreakBadge streak={careStreak} dailyXpEarned={dailyXpEarned} dailyXpCap={dailyXpCap} />
-
+        <StreakBadge
+          streak={careStreak}
+          dailyXpEarned={dailyXpEarned}
+          dailyXpCap={dailyXpCap}
+        />
         <ProgressBar
-          label={`Seviye ${pet.level}`}
+          label={`Level ${pet.level}`}
           value={pet.xp}
           max={xpNeeded}
           icon="⭐"
@@ -83,7 +86,7 @@ export default function StatPanel({
         />
 
         <div className="flex justify-end text-[9px] font-bold text-ink-muted pt-0.5 text-stroke-soft">
-          <span>Ruh ✦ {pet.spirit_points}</span>
+          <span>Spirit ✦ {pet.spirit_points}</span>
         </div>
       </div>
     </GamePanel>

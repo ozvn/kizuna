@@ -102,7 +102,7 @@ export default function MochiCharacter({
       <div
         className={`relative pixelated ${containerClass}`}
         style={{ width: gridSizePx, height: gridSizePx }}
-        aria-label={`Mochi — Seviye ${level}`}
+        aria-label={`Pet — Level ${level}`}
       >
         {tier === 'ancient' && <Sparkles />}
 

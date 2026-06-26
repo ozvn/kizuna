@@ -58,7 +58,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setProfileError(
           ensureError
             ? formatSupabaseError(ensureError)
-            : 'Profil oluşturulamadı. Supabase\'de fix_missing_profiles.sql dosyasını çalıştırın.',
+            : 'Profile could not be created. Run fix_missing_profiles.sql in Supabase.',
         );
         setProfile(null);
         setPartner(null);
@@ -141,7 +141,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const signUp = async (email: string, password: string, username: string) => {
     const trimmed = username.trim().toLowerCase();
     if (trimmed.length < 3) {
-      return { error: 'Kullanıcı adı en az 3 karakter olmalı', needsConfirmation: false };
+      return { error: 'Username must be at least 3 characters', needsConfirmation: false };
     }
 
     const { data: existing, error: lookupError } = await supabase
@@ -155,7 +155,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     if (existing) {
-      return { error: 'Bu kullanıcı adı zaten alınmış', needsConfirmation: false };
+      return { error: 'This username is already taken', needsConfirmation: false };
     }
 
     const { data, error } = await supabase.auth.signUp({
@@ -189,7 +189,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       }
 
       if (!data) {
-        return { error: 'Kullanıcı adı veya şifre hatalı' };
+        return { error: 'Invalid username or password' };
       }
 
       email = data as string;
@@ -200,7 +200,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (error) {
       const msg = error.message.toLowerCase();
       if (msg.includes('invalid login') || msg.includes('invalid credentials')) {
-        return { error: 'Kullanıcı adı veya şifre hatalı' };
+        return { error: 'Invalid username or password' };
       }
       return { error: formatSupabaseError(error) };
     }

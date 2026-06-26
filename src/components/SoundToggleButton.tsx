@@ -11,9 +11,9 @@ export default function SoundToggleButton({ muted, onToggle }: SoundToggleButton
       type="button"
       onClick={onToggle}
       className="pixel-btn p-1.5 bg-parchment text-ink-muted hover:text-ink"
-      aria-label={muted ? 'Sesi aç' : 'Sesi kapat'}
+      aria-label={muted ? 'Unmute' : 'Mute'}
       aria-pressed={muted}
-      title={muted ? 'Sesi aç' : 'Sesi kapat'}
+      title={muted ? 'Unmute' : 'Mute'}
     >
       {muted ? <VolumeX className="w-3.5 h-3.5" /> : <Volume2 className="w-3.5 h-3.5" />}
     </button>

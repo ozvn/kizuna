@@ -146,7 +146,7 @@ export default function PetScreen() {
         <div className="game-console min-h-[18rem] flex items-center justify-center">
           <div className="text-center space-y-3 px-4">
             <div className="game-loader mx-auto" />
-            <p className="text-[10px] font-bold text-ink-muted text-stroke-soft">Yükleniyor…</p>
+            <p className="text-[10px] font-bold text-ink-muted text-stroke-soft">Loading…</p>
           </div>
         </div>
       </div>
@@ -169,7 +169,7 @@ export default function PetScreen() {
           <div>
             <h1 className="font-pixel text-[9px] text-ink text-stroke-title leading-snug">Kizuna</h1>
             <p className="text-[9px] font-bold text-ink-muted mt-0.5 text-stroke-soft">
-              {pet.name} · Lv.{pet.level} · {partner?.username ?? 'Arkadaşın'}
+              {pet.name} · Lv.{pet.level} · {partner?.username ?? 'Partner'}
             </p>
           </div>
           <div className="flex items-center gap-1 shrink-0">
@@ -177,7 +177,7 @@ export default function PetScreen() {
             <button
               onClick={signOut}
               className="pixel-btn p-1.5 bg-parchment-light text-ink-muted hover:text-ink"
-              aria-label="Çıkış"
+                aria-label="Sign out"
             >
               <LogOut className="w-3.5 h-3.5" />
             </button>
@@ -185,7 +185,7 @@ export default function PetScreen() {
         </header>
 
         <div className="game-console-body">
-          <section className="mochi-playground" aria-label="Mochi alanı">
+          <section className="mochi-playground" aria-label="Pet playground">
             <div className="mochi-playground-stage">
               {speechText && (
                 <SpeechBubble

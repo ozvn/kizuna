@@ -46,7 +46,7 @@ let client: SupabaseClient | null = null;
 function getClient(): SupabaseClient {
   if (!config.valid) {
     throw new Error(
-      'Supabase yapılandırılmamış. .env dosyasına geçerli VITE_SUPABASE_URL ve VITE_SUPABASE_ANON_KEY ekleyin.',
+      'Supabase is not configured. Add valid VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY to .env.',
     );
   }
   if (!client) {
@@ -70,7 +70,7 @@ export const supabase = new Proxy({} as SupabaseClient, {
 
 export function getSupabaseConfigHint(): { url: string; hasKey: boolean } {
   return {
-    url: config.url || '(boş)',
+    url: config.url || '(empty)',
     hasKey: Boolean(config.anonKey && !PLACEHOLDER_VALUES.has(config.anonKey)),
   };
 }

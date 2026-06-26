@@ -35,7 +35,7 @@ export function useActionCooldowns(
       countdownMs: 0,
       countdownLabel: ACTION_COOLDOWN_LABEL[action],
       countdownText: null,
-      hintText: 'Yükleniyor…',
+      hintText: 'Loading…',
     });
 
     if (!ritualState) {
@@ -81,9 +81,9 @@ export function useActionCooldowns(
               available: false,
               locked: true,
               countdownMs: 0,
-              countdownLabel: 'Partner Onayı',
+              countdownLabel: 'Partner Approval',
               countdownText: null,
-              hintText: 'Partner onayını bekliyor…',
+              hintText: 'Waiting for partner…',
             };
           }
         }
@@ -97,7 +97,7 @@ export function useActionCooldowns(
           countdownMs: 0,
           countdownLabel: ACTION_COOLDOWN_LABEL.play,
           countdownText: null,
-          hintText: 'Enerji düşük',
+          hintText: 'Low energy',
         };
       }
 

@@ -63,7 +63,7 @@ export default function Matchmaking() {
       incoming.map((req) => ({
         ...(req as MatchRequest),
         proposed_pet_name: (req as MatchRequest).proposed_pet_name ?? 'Mochi',
-        sender: { username: nameById.get(req.sender_id) ?? 'Bilinmeyen' },
+        sender: { username: nameById.get(req.sender_id) ?? 'Unknown' },
       })),
     );
   }, [profile]);
@@ -109,7 +109,7 @@ export default function Matchmaking() {
 
     const username = targetUsername.trim().toLowerCase();
     if (username === profile.username) {
-      setError('Kendinize istek gönderemezsiniz');
+      setError("You can't send a request to yourself");
       return;
     }
 
@@ -159,11 +159,11 @@ export default function Matchmaking() {
   const statusLabel = (status: string) => {
     switch (status) {
       case 'pending':
-        return { text: 'Beklemede', color: 'text-gold' };
+        return { text: 'Pending', color: 'text-gold' };
       case 'accepted':
-        return { text: 'Kabul Edildi', color: 'text-sage-dark' };
+        return { text: 'Accepted', color: 'text-sage-dark' };
       case 'rejected':
-        return { text: 'Reddedildi', color: 'text-coral-dark' };
+        return { text: 'Declined', color: 'text-coral-dark' };
       default:
         return { text: status, color: 'text-ink' };
     }
@@ -178,10 +178,9 @@ export default function Matchmaking() {
         <div className="pixel-card-inner p-4 space-y-3">
           <div className="text-center pb-1 border-b-2 border-frame-light border-dashed">
             <Heart className="w-6 h-6 mx-auto text-rose-dark mb-1.5" fill="#F0A8C0" />
-            <h1 className="font-pixel text-[9px] text-ink text-stroke-title">Arkadaşını Bul</h1>
+            <h1 className="font-pixel text-[9px] text-ink text-stroke-title">Find Your Partner</h1>
             <p className="text-[10px] text-ink-muted mt-2 font-bold leading-relaxed text-stroke-soft">
-              Önce ortak petinize bir isim verin, ardından birlikte büyüteceğiniz kişiye istek
-              gönderin.
+              Name your shared pet, then send a request to the person you want to raise it with.
             </p>
           </div>
 
@@ -189,7 +188,7 @@ export default function Matchmaking() {
             <div>
               <label className="text-[10px] font-bold block mb-1 text-ink flex items-center gap-1">
                 <Sparkles className="w-3 h-3 text-gold" />
-                Pet Adı
+                Pet Name
               </label>
               <input
                 type="text"
@@ -202,12 +201,12 @@ export default function Matchmaking() {
                 placeholder="Mochi, Poko, Kira…"
               />
               <p className="text-[9px] text-ink-muted mt-1 font-semibold">
-                Kabul edildiğinde ortak petiniz bu isimle doğar.
+                When accepted, your shared pet is born with this name.
               </p>
             </div>
 
             <div>
-              <label className="text-[10px] font-bold block mb-1 text-ink">Kullanıcı Adı</label>
+              <label className="text-[10px] font-bold block mb-1 text-ink">Username</label>
               <div className="flex gap-1.5">
                 <input
                   type="text"
@@ -215,7 +214,7 @@ export default function Matchmaking() {
                   onChange={(e) => setTargetUsername(e.target.value)}
                   required
                   className="game-input flex-1"
-                  placeholder="kullanici_adi"
+                  placeholder="username"
                 />
                 <button
                   type="submit"
@@ -227,7 +226,7 @@ export default function Matchmaking() {
                   ) : (
                     <Send className="w-3.5 h-3.5" />
                   )}
-                  Gönder
+                  Send
                 </button>
               </div>
             </div>
@@ -238,12 +237,12 @@ export default function Matchmaking() {
           {incomingRequests.length > 0 && (
             <div className="game-panel">
               <div className="game-panel-inner space-y-2">
-                <h2 className="text-[10px] font-bold text-rose-dark text-stroke-soft">Gelen İstekler</h2>
+                <h2 className="text-[10px] font-bold text-rose-dark text-stroke-soft">Incoming</h2>
                 {incomingRequests.map((req) => (
                   <div key={req.id} className="game-list-row flex items-center justify-between gap-2">
                     <div className="min-w-0">
                       <p className="text-[10px] font-bold text-ink truncate">
-                        {req.sender?.username ?? 'Bilinmeyen'}
+                        {req.sender?.username ?? 'Unknown'}
                       </p>
                       <p className="text-[9px] text-ink-muted truncate">
                         Pet:{' '}
@@ -255,7 +254,7 @@ export default function Matchmaking() {
                         onClick={() => handleAccept(req.id)}
                         disabled={processingId === req.id}
                         className="pixel-btn p-1.5 bg-mint"
-                        aria-label="Kabul et"
+                        aria-label="Accept"
                       >
                         {processingId === req.id ? (
                           <Loader2 className="w-3.5 h-3.5 animate-spin" />
@@ -267,7 +266,7 @@ export default function Matchmaking() {
                         onClick={() => handleReject(req.id)}
                         disabled={processingId === req.id}
                         className="pixel-btn p-1.5 bg-peach"
-                        aria-label="Reddet"
+                        aria-label="Decline"
                       >
                         <X className="w-3.5 h-3.5" />
                       </button>
@@ -280,9 +279,9 @@ export default function Matchmaking() {
 
           <div className="game-panel">
             <div className="game-panel-inner space-y-2">
-              <h2 className="text-[10px] font-bold text-ink text-stroke-soft">Gönderilen İstekler</h2>
+              <h2 className="text-[10px] font-bold text-ink text-stroke-soft">Sent</h2>
               {sentRequests.length === 0 ? (
-                <p className="text-[10px] text-ink-muted font-semibold">Henüz istek gönderilmedi</p>
+                <p className="text-[10px] text-ink-muted font-semibold">No requests sent yet</p>
               ) : (
                 sentRequests.map((req) => {
                   const st = statusLabel(req.status);

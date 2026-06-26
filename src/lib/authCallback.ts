@@ -1,4 +1,4 @@
-/** URL hash içindeki Supabase auth hatalarını okur ve adres çubuğunu temizler */
+/** Reads Supabase auth errors from the URL hash and clears the address bar */
 export function consumeAuthCallbackMessage(): string | null {
   const hash = window.location.hash.startsWith('#')
     ? window.location.hash.slice(1)
@@ -19,7 +19,7 @@ export function consumeAuthCallbackMessage(): string | null {
   window.history.replaceState(null, '', window.location.pathname);
 
   if (errorCode === 'otp_expired' || errorDescription?.toLowerCase().includes('expired')) {
-    return 'Doğrulama linkinin süresi dolmuş veya zaten kullanılmış. Giriş ekranından yeni link isteyebilirsin.';
+    return 'This verification link expired or was already used. Request a new one from the sign-in screen.';
   }
 
   if (errorDescription) {
@@ -27,10 +27,10 @@ export function consumeAuthCallbackMessage(): string | null {
   }
 
   if (error === 'access_denied') {
-    return 'E-posta doğrulaması tamamlanamadı. Yeni bir doğrulama linki iste.';
+    return 'Email verification could not be completed. Request a new verification link.';
   }
 
-  return error ?? 'Giriş işlemi tamamlanamadı.';
+  return error ?? 'Sign-in could not be completed.';
 }
 
 export function getAuthRedirectUrl(): string {

@@ -22,12 +22,12 @@ export function calculateBRS(traits: number[]): number {
 }
 
 export function getRarityLabel(brs: number): string {
-  if (brs >= 450) return 'Efsanevi Nadir';
-  if (brs >= 400) return 'Çok Nadir';
-  if (brs >= 350) return 'Nadir';
-  if (brs >= 300) return 'Ortalama Üstü';
-  if (brs >= 250) return 'Ortalama';
-  return 'Yaygın';
+  if (brs >= 450) return 'Mythic Rare';
+  if (brs >= 400) return 'Ultra Rare';
+  if (brs >= 350) return 'Rare';
+  if (brs >= 300) return 'Above Average';
+  if (brs >= 250) return 'Average';
+  return 'Common';
 }
 
 export function xpForLevel(level: number): number {
@@ -88,8 +88,8 @@ export function randomPetName(): string {
 }
 
 export const ACTION_LABELS: Record<string, string> = {
-  feed: 'besledi',
-  pet: 'sevdi',
-  clean: 'temizledi',
-  play: 'birlikte oynattı',
+  feed: 'fed',
+  pet: 'petted',
+  clean: 'cleaned',
+  play: 'played together',
 };

@@ -23,25 +23,25 @@ export const colors = {
 
 export const statConfig = {
   hunger: {
-    label: 'Açlık',
+    label: 'Hunger',
     icon: '🍙',
     from: colors.coral,
     to: colors.peach,
   },
   cleanliness: {
-    label: 'Temizlik',
+    label: 'Clean',
     icon: '✨',
     from: colors.mint,
     to: colors.sage,
   },
   kinship: {
-    label: 'Yakınlık',
+    label: 'Bond',
     icon: '💕',
     from: colors.rose,
     to: colors.lavender,
   },
   energy: {
-    label: 'Enerji',
+    label: 'Energy',
     icon: '⚡',
     from: colors.sky,
     to: colors.lavender,
@@ -51,25 +51,25 @@ export const statConfig = {
 export const careActions = [
   {
     action: 'feed' as const,
-    label: 'Besle',
+    label: 'Feed',
     emoji: '🍡',
     accentClass: 'care-btn-feed',
   },
   {
     action: 'pet' as const,
-    label: 'Sev',
+    label: 'Pet',
     emoji: '💗',
     accentClass: 'care-btn-pet',
   },
   {
     action: 'clean' as const,
-    label: 'Temizle',
+    label: 'Clean',
     emoji: '🫧',
     accentClass: 'care-btn-clean',
   },
   {
     action: 'play' as const,
-    label: 'Birlikte Oyna',
+    label: 'Play Together',
     emoji: '🎮',
     accentClass: 'care-btn-play',
   },

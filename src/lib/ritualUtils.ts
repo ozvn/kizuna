@@ -47,7 +47,7 @@ export function isActionOnCooldown(
 }
 
 export function formatCountdown(totalMs: number): string {
-  if (totalMs <= 0) return 'Hazır';
+  if (totalMs <= 0) return 'Ready';
 
   const totalSec = Math.ceil(totalMs / 1000);
   const hours = Math.floor(totalSec / 3600);
@@ -55,12 +55,12 @@ export function formatCountdown(totalMs: number): string {
   const seconds = totalSec % 60;
 
   if (hours > 0) {
-    return `${hours}s ${String(minutes).padStart(2, '0')}dk`;
+    return `${hours}h ${String(minutes).padStart(2, '0')}m`;
   }
   if (minutes > 0) {
-    return `${minutes}dk ${String(seconds).padStart(2, '0')}sn`;
+    return `${minutes}m ${String(seconds).padStart(2, '0')}s`;
   }
-  return `${seconds}sn`;
+  return `${seconds}s`;
 }
 
 export function hoursSince(iso: string | null, now = Date.now()): number {
