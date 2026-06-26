@@ -471,3 +471,4 @@ END $$;
 
 -- ─── Friend play (4-owner approval) ───
 -- Kurulum: supabase/migrations/friend_play.sql dosyasını SQL Editor'de çalıştırın.
+-- Hata "record fp is not assigned yet": fix_get_pet_social_state_fp.sql dosyasını çalıştırın.

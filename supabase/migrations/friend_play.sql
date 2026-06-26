@@ -129,7 +129,7 @@ DECLARE
   outgoing JSONB;
   incoming JSONB;
   pending_play JSONB;
-  fp RECORD;
+  play_session RECORD;
   friend_pet_id UUID;
   friend_pet_name TEXT;
   required_owners UUID[];
@@ -146,15 +146,15 @@ BEGIN
   owners := public._pet_owner_ids(p_pet_id);
 
   SELECT COALESCE(jsonb_agg(jsonb_build_object(
-    'pet_id', fp.id,
-    'pet_name', fp.name,
-    'level', fp.level,
-    'care_streak', COALESCE(fp.care_streak, 0),
-    'score', public._pet_leaderboard_score(fp)
-  ) ORDER BY public._pet_leaderboard_score(fp) DESC), '[]'::jsonb)
+    'pet_id', friend_pet.id,
+    'pet_name', friend_pet.name,
+    'level', friend_pet.level,
+    'care_streak', COALESCE(friend_pet.care_streak, 0),
+    'score', public._pet_leaderboard_score(friend_pet)
+  ) ORDER BY public._pet_leaderboard_score(friend_pet) DESC), '[]'::jsonb)
   INTO friends
   FROM public.pet_friendships f
-  JOIN public.pets fp ON fp.id = CASE
+  JOIN public.pets friend_pet ON friend_pet.id = CASE
     WHEN f.pet_low_id = p_pet_id THEN f.pet_high_id
     ELSE f.pet_low_id
   END
@@ -204,8 +204,10 @@ BEGIN
   WHERE status = 'pending' AND expires_at < now()
     AND (pet_a_id = p_pet_id OR pet_b_id = p_pet_id);
 
+  pending_play := NULL;
+
   SELECT s.*, pa.name AS pet_a_name, pb.name AS pet_b_name
-  INTO fp
+  INTO play_session
   FROM public.friend_play_sessions s
   JOIN public.pets pa ON pa.id = s.pet_a_id
   JOIN public.pets pb ON pb.id = s.pet_b_id
@@ -214,29 +216,29 @@ BEGIN
   ORDER BY s.created_at DESC
   LIMIT 1;
 
-  IF fp.id IS NOT NULL THEN
-    friend_pet_id := CASE WHEN fp.pet_a_id = p_pet_id THEN fp.pet_b_id ELSE fp.pet_a_id END;
-    friend_pet_name := CASE WHEN fp.pet_a_id = p_pet_id THEN fp.pet_b_name ELSE fp.pet_a_name END;
-    required_owners := public._friend_play_owner_ids(fp.pet_a_id, fp.pet_b_id);
+  IF FOUND THEN
+    friend_pet_id := CASE WHEN play_session.pet_a_id = p_pet_id THEN play_session.pet_b_id ELSE play_session.pet_a_id END;
+    friend_pet_name := CASE WHEN play_session.pet_a_id = p_pet_id THEN play_session.pet_b_name ELSE play_session.pet_a_name END;
+    required_owners := public._friend_play_owner_ids(play_session.pet_a_id, play_session.pet_b_id);
     approval_count := (
-      SELECT COUNT(*)::int FROM unnest(required_owners) o WHERE o = ANY(fp.approvals)
+      SELECT COUNT(*)::int FROM unnest(required_owners) o WHERE o = ANY(play_session.approvals)
     );
 
     pending_play := jsonb_build_object(
-      'id', fp.id,
-      'pet_a_id', fp.pet_a_id,
-      'pet_b_id', fp.pet_b_id,
-      'pet_a_name', fp.pet_a_name,
-      'pet_b_name', fp.pet_b_name,
+      'id', play_session.id,
+      'pet_a_id', play_session.pet_a_id,
+      'pet_b_id', play_session.pet_b_id,
+      'pet_a_name', play_session.pet_a_name,
+      'pet_b_name', play_session.pet_b_name,
       'friend_pet_id', friend_pet_id,
       'friend_pet_name', friend_pet_name,
-      'initiated_by', fp.initiated_by,
-      'approvals', fp.approvals,
+      'initiated_by', play_session.initiated_by,
+      'approvals', play_session.approvals,
       'approval_count', approval_count,
       'required_approvals', GREATEST(COALESCE(array_length(required_owners, 1), 0), 4),
-      'needs_my_approval', NOT (uid = ANY(fp.approvals)),
-      'i_initiated', fp.initiated_by = uid,
-      'expires_at', fp.expires_at
+      'needs_my_approval', NOT (uid = ANY(play_session.approvals)),
+      'i_initiated', play_session.initiated_by = uid,
+      'expires_at', play_session.expires_at
     );
   END IF;
 
