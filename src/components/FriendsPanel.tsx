@@ -49,34 +49,34 @@ function RequestCard({
 
   return (
     <div className="game-list-row space-y-1.5">
-      <p className="text-[9px] font-bold text-ink text-stroke-soft">{title}</p>
-      <p className="text-[10px] font-bold text-rose-dark">{petName}</p>
+      <p className="game-heading text-ink text-stroke-soft">{title}</p>
+      <p className="game-body text-rose-dark font-bold">{petName}</p>
       {request.status === 'awaiting_sender' && (
-        <p className="text-[8px] text-ink-muted font-semibold">
+        <p className="game-caption text-ink-muted">
           Send approval: {approvalLabel(senderCount, 2)}
         </p>
       )}
       {request.status === 'awaiting_receiver' && (
-        <p className="text-[8px] text-ink-muted font-semibold">
+        <p className="game-caption text-ink-muted">
           Accept approval: {approvalLabel(receiverCount, 2)}
         </p>
       )}
-      <div className="flex gap-1 pt-0.5">
+      <div className="flex gap-1.5 pt-1">
         {needsAction && (
           <button
             type="button"
             disabled={busy}
             onClick={onConfirm}
-            className="pixel-btn flex-1 py-1.5 text-[8px] font-bold bg-mint text-ink"
+            className="pixel-btn flex-1 py-2 bg-mint text-ink"
           >
-            {busy ? <Loader2 className="w-3 h-3 animate-spin mx-auto" /> : 'Approve'}
+            {busy ? <Loader2 className="w-4 h-4 animate-spin mx-auto" /> : 'Approve'}
           </button>
         )}
         <button
           type="button"
           disabled={busy}
           onClick={onDecline}
-          className="pixel-btn flex-1 py-1.5 text-[8px] font-bold bg-peach text-ink"
+          className="pixel-btn flex-1 py-2 bg-peach text-ink"
         >
           Decline
         </button>
@@ -205,11 +205,11 @@ export default function FriendsPanel({
       <GamePanel className="w-full">
         <div className="space-y-2">
           <div className="flex items-center gap-1 pb-1 border-b-2 border-frame-light border-dashed">
-            <Gamepad2 className="w-3.5 h-3.5 text-mint" />
-            <h3 className="text-[10px] font-bold text-ink text-stroke-soft">Play with Friend</h3>
+            <Gamepad2 className="w-4 h-4 text-mint" />
+            <h3 className="game-heading text-ink text-stroke-soft">Play with Friend</h3>
           </div>
 
-          <p className="text-[8px] text-ink-muted font-semibold leading-snug">
+          <p className="game-caption text-ink-muted leading-snug">
             All 4 owners must approve. When complete: +{FRIEND_PLAY_ENERGY_BOOST} energy and +
             {FRIEND_PLAY_XP} XP for both pets.
           </p>
@@ -222,31 +222,31 @@ export default function FriendsPanel({
 
           {!loading && pendingPlay && (
             <div className="game-list-row space-y-1.5">
-              <p className="text-[9px] font-bold text-ink text-stroke-soft">Pending play session</p>
-              <p className="text-[10px] font-bold text-sky-dark">
+              <p className="game-heading text-ink text-stroke-soft">Pending play session</p>
+              <p className="game-body text-sky-dark font-bold">
                 {pendingPlay.pet_a_name} &amp; {pendingPlay.pet_b_name}
               </p>
-              <p className="text-[8px] text-ink-muted font-semibold">
+              <p className="game-caption text-ink-muted">
                 {approvalLabel(
                   pendingPlay.approval_count,
                   pendingPlay.required_approvals,
                 )}
               </p>
               {pendingPlay.i_initiated && !pendingPlay.needs_my_approval && (
-                <p className="text-[8px] text-ink-muted font-semibold">
+                <p className="game-caption text-ink-muted">
                   Waiting for all owners to approve…
                 </p>
               )}
-              <div className="flex gap-1 pt-0.5">
+              <div className="flex gap-1.5 pt-1">
                 {pendingPlay.needs_my_approval && (
                   <button
                     type="button"
                     disabled={busy}
                     onClick={() => approveFriendPlay(pendingPlay.id)}
-                    className="pixel-btn flex-1 py-1.5 text-[8px] font-bold bg-mint text-ink"
+                    className="pixel-btn flex-1 py-2 bg-mint text-ink"
                   >
                     {busy ? (
-                      <Loader2 className="w-3 h-3 animate-spin mx-auto" />
+                      <Loader2 className="w-4 h-4 animate-spin mx-auto" />
                     ) : (
                       'Approve Play'
                     )}
@@ -256,7 +256,7 @@ export default function FriendsPanel({
                   type="button"
                   disabled={busy}
                   onClick={() => declineFriendPlay(pendingPlay.id)}
-                  className="pixel-btn flex-1 py-1.5 text-[8px] font-bold bg-peach text-ink"
+                  className="pixel-btn flex-1 py-2 bg-peach text-ink"
                 >
                   Decline
                 </button>
@@ -265,7 +265,7 @@ export default function FriendsPanel({
           )}
 
           {!loading && !pendingPlay && !hasFriends && (
-            <p className="text-[9px] text-ink-muted font-semibold py-1">
+            <p className="game-body text-ink-muted py-1">
               Add a friend first to play together.
             </p>
           )}
@@ -278,8 +278,8 @@ export default function FriendsPanel({
                   className="game-list-row flex items-center justify-between gap-2"
                 >
                   <div className="min-w-0">
-                    <p className="text-[10px] font-bold text-ink truncate">{f.pet_name}</p>
-                    <p className="text-[8px] text-ink-muted font-semibold">
+                    <p className="game-heading text-ink truncate">{f.pet_name}</p>
+                    <p className="game-caption text-ink-muted">
                       Lv.{f.level} · 🔥{f.care_streak}
                     </p>
                   </div>
@@ -287,10 +287,10 @@ export default function FriendsPanel({
                     type="button"
                     disabled={busy}
                     onClick={() => startFriendPlay(f.pet_id)}
-                    className="pixel-btn px-2 py-1 text-[8px] font-bold bg-lavender shrink-0"
+                    className="pixel-btn px-3 py-1.5 bg-lavender shrink-0"
                   >
                     {busy ? (
-                      <Loader2 className="w-3 h-3 animate-spin" />
+                      <Loader2 className="w-4 h-4 animate-spin" />
                     ) : (
                       'Play'
                     )}
@@ -305,11 +305,11 @@ export default function FriendsPanel({
       <GamePanel className="w-full">
         <div className="space-y-2">
           <div className="flex items-center gap-1 pb-1 border-b-2 border-frame-light border-dashed">
-            <UserPlus className="w-3.5 h-3.5 text-sky" />
-            <h3 className="text-[10px] font-bold text-ink text-stroke-soft">Add Friend</h3>
+            <UserPlus className="w-4 h-4 text-sky" />
+            <h3 className="game-heading text-ink text-stroke-soft">Add Friend</h3>
           </div>
 
-          <p className="text-[8px] text-ink-muted font-semibold leading-snug">
+          <p className="game-caption text-ink-muted leading-snug">
             Both you and {partnerUsername ?? 'your partner'} must approve sending. Their couple
             must both approve accepting.
           </p>
@@ -320,20 +320,20 @@ export default function FriendsPanel({
               value={targetName}
               onChange={(e) => setTargetName(e.target.value)}
               placeholder="Pet name"
-              className="game-input flex-1 text-[10px]"
+              className="game-input flex-1"
               minLength={2}
               maxLength={50}
             />
             <button
               type="submit"
               disabled={busy || targetName.trim().length < 2}
-              className="pixel-btn px-2.5 py-1.5 bg-lavender shrink-0"
+              className="pixel-btn px-3 py-2 bg-lavender shrink-0"
               aria-label="Send friend request"
             >
               {busy ? (
-                <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                <Loader2 className="w-4 h-4 animate-spin" />
               ) : (
-                <Send className="w-3.5 h-3.5" />
+                <Send className="w-4 h-4" />
               )}
             </button>
           </form>
@@ -341,7 +341,7 @@ export default function FriendsPanel({
       </GamePanel>
 
       {(error || actionError) && (
-        <p className="game-alert game-alert-error text-[9px]">{actionError ?? error}</p>
+        <p className="game-alert game-alert-error">{actionError ?? error}</p>
       )}
 
       {loading && (
@@ -375,24 +375,24 @@ export default function FriendsPanel({
       <GamePanel className="w-full">
         <div className="space-y-2">
           <div className="flex items-center gap-1 pb-1 border-b-2 border-frame-light border-dashed">
-            <Heart className="w-3.5 h-3.5 text-rose-dark" fill="#F0A8C0" />
-            <h3 className="text-[10px] font-bold text-ink text-stroke-soft">Pet Friends</h3>
+            <Heart className="w-4 h-4 text-rose-dark" fill="#F0A8C0" />
+            <h3 className="game-heading text-ink text-stroke-soft">Pet Friends</h3>
           </div>
 
           {!loading && !hasFriends && (
-            <p className="text-[9px] text-ink-muted font-semibold">No friends yet.</p>
+            <p className="game-body text-ink-muted">No friends yet.</p>
           )}
 
-          <ul className="space-y-1">
+          <ul className="space-y-1.5">
             {social?.friends.map((f) => (
               <li key={f.pet_id} className="game-list-row flex justify-between items-center gap-2">
                 <div>
-                  <p className="text-[10px] font-bold text-ink">{f.pet_name}</p>
-                  <p className="text-[8px] text-ink-muted font-semibold">
+                  <p className="game-heading text-ink">{f.pet_name}</p>
+                  <p className="game-caption text-ink-muted">
                     Lv.{f.level} · 🔥{f.care_streak}
                   </p>
                 </div>
-                <span className="text-[9px] font-bold text-coral-dark">{f.score} pts</span>
+                <span className="game-body text-coral-dark">{f.score} pts</span>
               </li>
             ))}
           </ul>

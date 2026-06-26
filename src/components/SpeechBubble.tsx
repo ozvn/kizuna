@@ -66,9 +66,9 @@ export default function SpeechBubble({
   if (!text) return null;
 
   return (
-    <div className="absolute -top-12 left-1/2 -translate-x-1/2 z-20 min-w-[88px] max-w-[140px]">
+    <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-20 min-w-[100px] max-w-[168px]">
       <div className="speech-bubble text-center">
-        <p className="text-[10px] leading-snug text-ink font-bold text-stroke-soft">
+        <p className="game-body leading-snug text-ink text-stroke-soft">
           {displayed}
           {isSpeaking && <span className="animate-pulse">|</span>}
         </p>

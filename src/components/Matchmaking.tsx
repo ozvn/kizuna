@@ -175,19 +175,19 @@ export default function Matchmaking() {
   return (
     <div className="game-device-canvas safe-area">
       <div className="game-console w-full max-w-md">
-        <div className="pixel-card-inner p-4 space-y-3">
-          <div className="text-center pb-1 border-b-2 border-frame-light border-dashed">
-            <Heart className="w-6 h-6 mx-auto text-rose-dark mb-1.5" fill="#F0A8C0" />
-            <h1 className="font-pixel text-[9px] text-ink text-stroke-title">Find Your Partner</h1>
-            <p className="text-[10px] text-ink-muted mt-2 font-bold leading-relaxed text-stroke-soft">
+        <div className="pixel-card-inner p-5 space-y-4">
+          <div className="text-center pb-2 border-b-2 border-frame-light border-dashed">
+            <Heart className="w-7 h-7 mx-auto text-rose-dark mb-2" fill="#F0A8C0" />
+            <h1 className="game-title-pixel text-ink text-stroke-title">Find Your Partner</h1>
+            <p className="game-body text-ink-muted mt-2 leading-relaxed text-stroke-soft">
               Name your shared pet, then send a request to the person you want to raise it with.
             </p>
           </div>
 
-          <form onSubmit={handleSendRequest} className="space-y-3">
+          <form onSubmit={handleSendRequest} className="space-y-4">
             <div>
-              <label className="text-[10px] font-bold block mb-1 text-ink flex items-center gap-1">
-                <Sparkles className="w-3 h-3 text-gold" />
+              <label className="game-label block mb-1.5 text-ink flex items-center gap-1.5">
+                <Sparkles className="w-4 h-4 text-gold" />
                 Pet Name
               </label>
               <input
@@ -200,14 +200,14 @@ export default function Matchmaking() {
                 className="game-input"
                 placeholder="Mochi, Poko, Kira…"
               />
-              <p className="text-[9px] text-ink-muted mt-1 font-semibold">
+              <p className="game-caption text-ink-muted mt-1.5">
                 When accepted, your shared pet is born with this name.
               </p>
             </div>
 
             <div>
-              <label className="text-[10px] font-bold block mb-1 text-ink">Username</label>
-              <div className="flex gap-1.5">
+              <label className="game-label block mb-1.5 text-ink">Username</label>
+              <div className="flex gap-2">
                 <input
                   type="text"
                   value={targetUsername}
@@ -219,12 +219,12 @@ export default function Matchmaking() {
                 <button
                   type="submit"
                   disabled={!canSend}
-                  className="pixel-btn px-3 py-2 bg-lavender text-[10px] font-bold flex items-center gap-1 shrink-0 disabled:opacity-50"
+                  className="pixel-btn px-4 py-2.5 bg-lavender flex items-center gap-1.5 shrink-0 disabled:opacity-50"
                 >
                   {loading ? (
-                    <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                    <Loader2 className="w-4 h-4 animate-spin" />
                   ) : (
-                    <Send className="w-3.5 h-3.5" />
+                    <Send className="w-4 h-4" />
                   )}
                   Send
                 </button>
@@ -237,14 +237,14 @@ export default function Matchmaking() {
           {incomingRequests.length > 0 && (
             <div className="game-panel">
               <div className="game-panel-inner space-y-2">
-                <h2 className="text-[10px] font-bold text-rose-dark text-stroke-soft">Incoming</h2>
+                <h2 className="game-heading text-rose-dark text-stroke-soft">Incoming</h2>
                 {incomingRequests.map((req) => (
                   <div key={req.id} className="game-list-row flex items-center justify-between gap-2">
                     <div className="min-w-0">
-                      <p className="text-[10px] font-bold text-ink truncate">
+                      <p className="game-heading text-ink truncate">
                         {req.sender?.username ?? 'Unknown'}
                       </p>
-                      <p className="text-[9px] text-ink-muted truncate">
+                      <p className="game-caption text-ink-muted truncate">
                         Pet:{' '}
                         <span className="font-bold text-rose-dark">{req.proposed_pet_name}</span>
                       </p>
@@ -253,22 +253,22 @@ export default function Matchmaking() {
                       <button
                         onClick={() => handleAccept(req.id)}
                         disabled={processingId === req.id}
-                        className="pixel-btn p-1.5 bg-mint"
+                        className="pixel-btn p-2 bg-mint"
                         aria-label="Accept"
                       >
                         {processingId === req.id ? (
-                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
+                          <Loader2 className="w-4 h-4 animate-spin" />
                         ) : (
-                          <Check className="w-3.5 h-3.5" />
+                          <Check className="w-4 h-4" />
                         )}
                       </button>
                       <button
                         onClick={() => handleReject(req.id)}
                         disabled={processingId === req.id}
-                        className="pixel-btn p-1.5 bg-peach"
+                        className="pixel-btn p-2 bg-peach"
                         aria-label="Decline"
                       >
-                        <X className="w-3.5 h-3.5" />
+                        <X className="w-4 h-4" />
                       </button>
                     </div>
                   </div>
@@ -279,9 +279,9 @@ export default function Matchmaking() {
 
           <div className="game-panel">
             <div className="game-panel-inner space-y-2">
-              <h2 className="text-[10px] font-bold text-ink text-stroke-soft">Sent</h2>
+              <h2 className="game-heading text-ink text-stroke-soft">Sent</h2>
               {sentRequests.length === 0 ? (
-                <p className="text-[10px] text-ink-muted font-semibold">No requests sent yet</p>
+                <p className="game-body text-ink-muted">No requests sent yet</p>
               ) : (
                 sentRequests.map((req) => {
                   const st = statusLabel(req.status);
@@ -292,18 +292,18 @@ export default function Matchmaking() {
                       className="game-list-row flex items-center justify-between gap-2"
                     >
                       <div className="min-w-0">
-                        <p className="text-[10px] font-bold text-ink truncate">
+                        <p className="game-heading text-ink truncate">
                           @{req.receiver_username}
                         </p>
-                        <p className="text-[9px] text-ink-muted truncate">
+                        <p className="game-caption text-ink-muted truncate">
                           Pet: <span className="font-bold">{displayPetName}</span>
                         </p>
                       </div>
                       <span
-                        className={`text-[9px] font-bold flex items-center gap-0.5 shrink-0 ${st.color}`}
+                        className={`game-caption flex items-center gap-1 shrink-0 ${st.color}`}
                       >
                         {req.status === 'pending' && (
-                          <Loader2 className="w-3 h-3 animate-spin" />
+                          <Loader2 className="w-3.5 h-3.5 animate-spin" />
                         )}
                         {st.text}
                       </span>

@@ -10,20 +10,20 @@ interface CareLogPanelProps {
 export default function CareLogPanel({ logs }: CareLogPanelProps) {
   return (
     <GamePanel className="w-full">
-      <div className="flex items-center gap-1.5 mb-1.5 pb-1 border-b-2 border-frame-light border-dashed">
-        <ScrollText className="w-3.5 h-3.5 text-ink-muted" />
-        <h3 className="text-[10px] font-bold text-ink text-stroke-soft">Care Log</h3>
+      <div className="flex items-center gap-2 mb-2 pb-1.5 border-b-2 border-frame-light border-dashed">
+        <ScrollText className="w-4 h-4 text-ink-muted" />
+        <h3 className="game-heading text-ink text-stroke-soft">Care Log</h3>
       </div>
 
       {logs.length === 0 ? (
-        <p className="text-[9px] text-ink-muted font-semibold py-0.5">
+        <p className="game-body text-ink-muted py-1">
           No care records yet — your pet is waiting!
         </p>
       ) : (
-        <ul className="game-log-scroll space-y-1">
+        <ul className="game-log-scroll space-y-1.5">
           {logs.map((log) => (
-            <li key={log.id} className="text-[9px] leading-snug text-ink font-semibold text-stroke-soft">
-              <span className="text-rose-dark">
+            <li key={log.id} className="game-caption leading-snug text-ink text-stroke-soft">
+              <span className="text-rose-dark font-bold">
                 {(log as CareLog & { profile?: { username: string } }).profile?.username ??
                   'Partner'}
               </span>{' '}

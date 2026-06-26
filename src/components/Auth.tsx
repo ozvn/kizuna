@@ -81,22 +81,22 @@ export default function Auth() {
   return (
     <div className="game-device-canvas safe-area">
       <div className="game-console w-full max-w-sm">
-        <div className="pixel-card-inner p-5 space-y-4">
-          <div className="flex items-center justify-center gap-2">
-            <Heart className="w-5 h-5 text-rose-dark" fill="#F0A8C0" />
-            <h1 className="font-pixel text-[9px] text-ink text-stroke-title">Kizuna</h1>
+        <div className="pixel-card-inner p-6 space-y-5">
+          <div className="flex items-center justify-center gap-2.5">
+            <Heart className="w-6 h-6 text-rose-dark" fill="#F0A8C0" />
+            <h1 className="game-title-pixel text-ink text-stroke-title">Kizuna</h1>
           </div>
 
-          <p className="text-[10px] text-center text-ink-muted font-bold leading-relaxed text-stroke-soft">
+          <p className="game-body text-center text-ink-muted leading-relaxed text-stroke-soft">
             A shared virtual pet experience
             <br />
             Raise your pet together
           </p>
 
-          <form onSubmit={handleSubmit} className="space-y-3">
+          <form onSubmit={handleSubmit} className="space-y-4">
             {mode === 'register' && (
               <div>
-                <label className="text-[10px] font-bold block mb-1 text-ink">Username</label>
+                <label className="game-label block mb-1.5 text-ink">Username</label>
                 <input
                   type="text"
                   value={username}
@@ -112,7 +112,7 @@ export default function Auth() {
 
             {mode === 'login' ? (
               <div>
-                <label className="text-[10px] font-bold block mb-1 text-ink">
+                <label className="game-label block mb-1.5 text-ink">
                   Email or Username
                 </label>
                 <input
@@ -126,7 +126,7 @@ export default function Auth() {
               </div>
             ) : (
               <div>
-                <label className="text-[10px] font-bold block mb-1 text-ink">Email</label>
+                <label className="game-label block mb-1.5 text-ink">Email</label>
                 <input
                   type="email"
                   value={email}
@@ -139,7 +139,7 @@ export default function Auth() {
             )}
 
             <div>
-              <label className="text-[10px] font-bold block mb-1 text-ink">Password</label>
+              <label className="game-label block mb-1.5 text-ink">Password</label>
               <input
                 type="password"
                 value={password}
@@ -158,15 +158,15 @@ export default function Auth() {
             <button
               type="submit"
               disabled={loading}
-              className="pixel-btn w-full py-2.5 text-[10px] font-bold bg-lavender text-ink flex items-center justify-center gap-1.5"
+              className="pixel-btn w-full py-3 bg-lavender text-ink flex items-center justify-center gap-2"
             >
               {mode === 'login' ? (
                 <>
-                  <LogIn className="w-3.5 h-3.5" /> Sign In
+                  <LogIn className="w-4 h-4" /> Sign In
                 </>
               ) : (
                 <>
-                  <UserPlus className="w-3.5 h-3.5" /> Sign Up
+                  <UserPlus className="w-4 h-4" /> Sign Up
                 </>
               )}
             </button>
@@ -177,9 +177,9 @@ export default function Auth() {
               type="button"
               onClick={handleResend}
               disabled={loading}
-              className="pixel-btn w-full py-2 text-[9px] font-bold bg-sky text-ink flex items-center justify-center gap-1.5"
+              className="pixel-btn w-full py-2.5 bg-sky text-ink flex items-center justify-center gap-2"
             >
-              <Mail className="w-3 h-3" />
+              <Mail className="w-4 h-4" />
               Resend verification email
             </button>
           )}
@@ -192,12 +192,12 @@ export default function Auth() {
               setSuccess(null);
               setShowResend(false);
             }}
-            className="w-full text-[9px] font-bold text-ink-muted hover:text-ink underline underline-offset-2"
+            className="w-full game-caption text-ink-muted hover:text-ink underline underline-offset-2"
           >
             {mode === 'login' ? "Don't have an account? Sign up" : 'Already have an account? Sign in'}
           </button>
 
-          <p className="text-[8px] text-center text-ink-muted font-semibold pt-1 border-t-2 border-frame-light border-dashed">
+          <p className="game-caption text-center text-ink-muted pt-2 border-t-2 border-frame-light border-dashed">
             Made with love for Kumsal
           </p>
         </div>

@@ -6,7 +6,6 @@ interface ProgressBarProps {
   max?: number;
   icon: string;
   variant: StatFillVariant;
-  /** Örn: "72/200" — verilmezse sadece value gösterilir */
   valueLabel?: string;
   hint?: string;
 }
@@ -24,14 +23,14 @@ export default function ProgressBar({
   const displayValue = valueLabel ?? String(Math.round(value));
 
   return (
-    <div className="flex items-center gap-1.5">
-      <span className="text-sm leading-none shrink-0 w-4 text-center" aria-hidden>
+    <div className="flex items-center gap-2">
+      <span className="text-base leading-none shrink-0 w-5 text-center" aria-hidden>
         {icon}
       </span>
       <div className="flex-1 min-w-0">
-        <div className="flex justify-between items-baseline mb-0.5 gap-1">
-          <span className="text-[10px] font-bold text-ink text-stroke-soft">{label}</span>
-          <span className="text-[9px] text-ink-muted tabular-nums font-bold shrink-0">
+        <div className="flex justify-between items-baseline mb-1 gap-1">
+          <span className="game-label text-ink text-stroke-soft">{label}</span>
+          <span className="game-caption text-ink-muted tabular-nums shrink-0">
             {displayValue}
           </span>
         </div>
@@ -42,7 +41,7 @@ export default function ProgressBar({
           />
         </div>
         {hint && (
-          <p className="text-[8px] text-ink-muted font-semibold mt-0.5 leading-tight">{hint}</p>
+          <p className="game-caption text-ink-muted mt-1">{hint}</p>
         )}
       </div>
     </div>

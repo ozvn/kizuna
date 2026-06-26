@@ -13,7 +13,7 @@ function AppContent() {
       <div className="game-device-canvas safe-area">
         <div className="text-center space-y-3">
           <div className="game-loader mx-auto" />
-          <p className="text-[10px] font-bold text-ink-muted text-stroke-soft">Loading Kizuna…</p>
+          <p className="game-body text-ink-muted text-stroke-soft">Loading Kizuna…</p>
         </div>
       </div>
     );
@@ -28,11 +28,11 @@ function AppContent() {
       <div className="game-device-canvas safe-area">
         <div className="game-console max-w-sm w-full">
           <div className="pixel-card-inner p-5 text-center space-y-3">
-            <p className="text-[10px] font-bold text-coral-dark">{profileError ?? 'Profile failed to load'}</p>
+            <p className="game-body text-coral-dark">{profileError ?? 'Profile failed to load'}</p>
             <button
               type="button"
               onClick={() => refreshProfile()}
-              className="pixel-btn px-4 py-2 text-[10px] font-bold bg-peach text-ink"
+              className="pixel-btn px-5 py-2.5 bg-peach text-ink"
             >
               Try Again
             </button>

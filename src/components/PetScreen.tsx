@@ -154,7 +154,7 @@ export default function PetScreen() {
         <div className="game-console min-h-[18rem] flex items-center justify-center">
           <div className="text-center space-y-3 px-4">
             <div className="game-loader mx-auto" />
-            <p className="text-[10px] font-bold text-ink-muted text-stroke-soft">Loading…</p>
+            <p className="game-body text-ink-muted text-stroke-soft">Loading…</p>
           </div>
         </div>
       </div>
@@ -175,8 +175,8 @@ export default function PetScreen() {
       <div className={`game-console ${bg.className}`}>
         <header className="game-header-bar">
           <div>
-            <h1 className="font-pixel text-[9px] text-ink text-stroke-title leading-snug">Kizuna</h1>
-            <p className="text-[9px] font-bold text-ink-muted mt-0.5 text-stroke-soft">
+            <h1 className="game-title-pixel text-ink text-stroke-title">Kizuna</h1>
+            <p className="game-caption text-ink-muted mt-1 text-stroke-soft">
               {pet.name} · Lv.{pet.level} · {partner?.username ?? 'Partner'}
             </p>
           </div>
@@ -238,7 +238,7 @@ export default function PetScreen() {
               <p className="game-alert game-alert-error text-center">{actionError}</p>
             )}
 
-            <div className="grid grid-cols-4 gap-2 w-full">
+            <div className="grid grid-cols-4 gap-2.5 w-full">
               {careActions.map(({ action, label, emoji, accentClass }) => {
                 const avail = cooldowns[action];
                 return (

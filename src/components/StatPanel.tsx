@@ -34,10 +34,10 @@ export default function StatPanel({
 
   return (
     <GamePanel className="w-full">
-      <div className="space-y-2">
+      <div className="space-y-2.5">
         <div className="flex justify-between items-center pb-1 border-b-2 border-frame-light border-dashed">
-          <span className="flex items-center gap-1 text-[10px] font-bold text-ink text-stroke-title font-pixel">
-            <Sparkles className="w-3 h-3 text-gold" />
+          <span className="game-label flex items-center gap-1.5 text-ink text-stroke-title font-pixel">
+            <Sparkles className="w-4 h-4 text-gold" />
             BRS {brs}
           </span>
           <span className="game-tag text-ink">{rarityLabel}</span>
@@ -85,7 +85,7 @@ export default function StatPanel({
           hint={energyHint}
         />
 
-        <div className="flex justify-end text-[9px] font-bold text-ink-muted pt-0.5 text-stroke-soft">
+        <div className="flex justify-end game-caption text-ink-muted pt-1 text-stroke-soft">
           <span>Spirit ✦ {pet.spirit_points}</span>
         </div>
       </div>
