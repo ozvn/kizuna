@@ -66,7 +66,7 @@ export default function SpeechBubble({
   if (!text) return null;
 
   return (
-    <div className="absolute -top-14 left-1/2 -translate-x-1/2 z-20 min-w-[100px] max-w-[168px]">
+    <div className="speech-bubble-anchor">
       <div className="speech-bubble text-center">
         <p className="game-body leading-snug text-ink text-stroke-soft">
           {displayed}

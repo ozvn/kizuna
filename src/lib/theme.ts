@@ -69,7 +69,7 @@ export const careActions = [
   },
   {
     action: 'play' as const,
-    label: 'Play Together',
+    label: 'Play',
     emoji: '🎮',
     accentClass: 'care-btn-play',
   },

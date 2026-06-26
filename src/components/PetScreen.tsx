@@ -16,6 +16,7 @@ import { careActions } from '../lib/theme';
 import { COOLDOWN_HOURS } from '../lib/ritualConfig';
 import type { CareAction, PetMood, PetScreenTab } from '../types';
 import MochiCharacter from './MochiCharacter';
+import PetHudBar from './PetHudBar';
 import StatPanel from './StatPanel';
 import CareActionButton from './CareActionButton';
 import CareLogPanel from './CareLogPanel';
@@ -174,23 +175,31 @@ export default function PetScreen() {
     <div className="game-device-canvas safe-area">
       <div className={`game-console ${bg.className}`}>
         <header className="game-header-bar">
-          <div>
+          <div className="min-w-0">
             <h1 className="game-title-pixel text-ink text-stroke-title">Kizuna</h1>
-            <p className="game-caption text-ink-muted mt-1 text-stroke-soft">
-              {pet.name} · Lv.{pet.level} · {partner?.username ?? 'Partner'}
+            <p className="game-caption text-ink-muted mt-1 text-stroke-soft truncate">
+              {partner?.username ?? 'Partner'}
             </p>
           </div>
-          <div className="flex items-center gap-1 shrink-0">
+          <div className="flex items-center gap-1.5 shrink-0">
             <SoundToggleButton muted={muted} onToggle={toggleSound} />
             <button
               onClick={signOut}
-              className="pixel-btn p-1.5 bg-parchment-light text-ink-muted hover:text-ink"
-                aria-label="Sign out"
+              className="pixel-btn p-2 bg-parchment-light text-ink-muted hover:text-ink"
+              aria-label="Sign out"
             >
-              <LogOut className="w-3.5 h-3.5" />
+              <LogOut className="w-4 h-4" />
             </button>
           </div>
         </header>
+
+        <PetHudBar
+          level={pet.level}
+          petName={pet.name}
+          brs={brs}
+          rarityLabel={getRarityLabel(brs)}
+          spiritPoints={pet.spirit_points}
+        />
 
         <div className="game-console-body">
           <PetScreenNav active={screenTab} onChange={setScreenTab} />
@@ -198,70 +207,72 @@ export default function PetScreen() {
           {screenTab === 'home' && (
             <>
               <section className="mochi-playground" aria-label="Pet playground">
-            <div className="mochi-playground-stage">
-              {speechText && (
-                <SpeechBubble
-                  key={speechKey}
-                  text={speechText}
-                  petEnergy={pet.energy}
-                  petKinship={pet.kinship}
-                  hoursSinceFeed={hoursSinceFeed}
-                  onComplete={() => setSpeechText('')}
+                <div className="mochi-playground-stage">
+                  <div className="mochi-speech-slot">
+                    {speechText && (
+                      <SpeechBubble
+                        key={speechKey}
+                        text={speechText}
+                        petEnergy={pet.energy}
+                        petKinship={pet.kinship}
+                        hoursSinceFeed={hoursSinceFeed}
+                        onComplete={() => setSpeechText('')}
+                      />
+                    )}
+                  </div>
+                  <div className="mochi-character-slot">
+                    <MochiCharacter
+                      level={pet.level}
+                      mood={ambientMood}
+                      eyeShape={pet.eye_shape}
+                      eyeColor={pet.eye_color}
+                      spookiness={pet.spookiness}
+                      isNight={bg.period === 'night'}
+                    />
+                  </div>
+                  <div className="mochi-podium" aria-hidden>
+                    <div className="mochi-podium-grass" />
+                    <div className="mochi-podium-base" />
+                  </div>
+                </div>
+              </section>
+
+              <div className="game-content-rail">
+                <StatPanel
+                  pet={pet}
+                  careStreak={ritualState?.care_streak ?? 0}
+                  dailyXpEarned={ritualState?.daily_xp_earned ?? 0}
+                  dailyXpCap={ritualState?.daily_xp_cap ?? 8}
                 />
-              )}
-              <MochiCharacter
-                level={pet.level}
-                mood={ambientMood}
-                eyeShape={pet.eye_shape}
-                eyeColor={pet.eye_color}
-                spookiness={pet.spookiness}
-                isNight={bg.period === 'night'}
-              />
-              <div className="mochi-podium" aria-hidden>
-                <div className="mochi-podium-grass" />
-                <div className="mochi-podium-base" />
+
+                {actionError && (
+                  <p className="game-alert game-alert-error text-center">{actionError}</p>
+                )}
+
+                <div className="game-action-grid">
+                  {careActions.map(({ action, label, emoji, accentClass }) => {
+                    const avail = cooldowns[action];
+                    return (
+                      <CareActionButton
+                        key={action}
+                        label={label}
+                        emoji={emoji}
+                        accentClass={accentClass}
+                        loading={actionLoading === action}
+                        locked={avail.locked}
+                        disabled={!avail.available || actionLoading !== null}
+                        confirmMode={avail.confirmMode}
+                        countdownLabel={avail.countdownLabel}
+                        countdownText={avail.countdownText}
+                        hintText={avail.hintText}
+                        onClick={() => handleAction(action)}
+                      />
+                    );
+                  })}
+                </div>
+
+                <CareLogPanel logs={careLogs} />
               </div>
-            </div>
-          </section>
-
-          <div className="game-stack">
-            <StatPanel
-              pet={pet}
-              brs={brs}
-              rarityLabel={getRarityLabel(brs)}
-              careStreak={ritualState?.care_streak ?? 0}
-              dailyXpEarned={ritualState?.daily_xp_earned ?? 0}
-              dailyXpCap={ritualState?.daily_xp_cap ?? 8}
-            />
-
-            {actionError && (
-              <p className="game-alert game-alert-error text-center">{actionError}</p>
-            )}
-
-            <div className="grid grid-cols-4 gap-2.5 w-full">
-              {careActions.map(({ action, label, emoji, accentClass }) => {
-                const avail = cooldowns[action];
-                return (
-                  <CareActionButton
-                    key={action}
-                    label={label}
-                    emoji={emoji}
-                    accentClass={accentClass}
-                    loading={actionLoading === action}
-                    locked={avail.locked}
-                    disabled={!avail.available || actionLoading !== null}
-                    confirmMode={avail.confirmMode}
-                    countdownLabel={avail.countdownLabel}
-                    countdownText={avail.countdownText}
-                    hintText={avail.hintText}
-                    onClick={() => handleAction(action)}
-                  />
-                );
-              })}
-            </div>
-
-            <CareLogPanel logs={careLogs} />
-          </div>
             </>
           )}
 

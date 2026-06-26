@@ -9,7 +9,7 @@ interface CareLogPanelProps {
 
 export default function CareLogPanel({ logs }: CareLogPanelProps) {
   return (
-    <GamePanel className="w-full">
+    <GamePanel className="w-full game-panel-rail">
       <div className="flex items-center gap-2 mb-2 pb-1.5 border-b-2 border-frame-light border-dashed">
         <ScrollText className="w-4 h-4 text-ink-muted" />
         <h3 className="game-heading text-ink text-stroke-soft">Care Log</h3>
