@@ -51,6 +51,19 @@ const KNOWN_USER_MESSAGES = new Set([
   'Username must be at least 3 characters',
   'This username is already taken',
   'Enter your email address for the verification email.',
+  'Pet not found',
+  'You cannot friend your own pet',
+  'Already friends with this pet',
+  'A friend request is already pending',
+  'Pet name must be at least 2 characters',
+  'You do not have a pet yet',
+  'Friend request not found',
+  'This request is not awaiting sender approval',
+  'This request is not awaiting receiver approval',
+  'Friend request expired',
+  'You already approved this request',
+  'You do not have access to this request',
+  'You do not have access to this pet',
   ...Object.values(TR_TO_EN),
 ]);
 
@@ -97,6 +110,13 @@ function formatMissingFunction(fullText: string): string {
   }
   if (fullText.includes('ensure_user_profile')) {
     return 'Profile system is not active. Admin: run fix_missing_profiles.sql.';
+  }
+  if (
+    fullText.includes('get_pet_leaderboard') ||
+    fullText.includes('get_pet_social_state') ||
+    fullText.includes('initiate_pet_friend_request')
+  ) {
+    return 'Leaderboard & friends need an update. Admin: run leaderboard_and_friends.sql.';
   }
   return 'Server configuration is incomplete. Please try again later.';
 }

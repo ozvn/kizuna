@@ -14,19 +14,27 @@ import { soundEngine } from '../lib/soundEngine';
 import { formatSupabaseError } from '../lib/supabaseErrors';
 import { careActions } from '../lib/theme';
 import { COOLDOWN_HOURS } from '../lib/ritualConfig';
-import type { CareAction, PetMood } from '../types';
+import type { CareAction, PetMood, PetScreenTab } from '../types';
 import MochiCharacter from './MochiCharacter';
 import StatPanel from './StatPanel';
 import CareActionButton from './CareActionButton';
 import CareLogPanel from './CareLogPanel';
 import SpeechBubble from './SpeechBubble';
 import SoundToggleButton from './SoundToggleButton';
+import PetScreenNav from './PetScreenNav';
+import LeaderboardPanel from './LeaderboardPanel';
+import FriendsPanel from './FriendsPanel';
+import { useLeaderboard } from '../hooks/useLeaderboard';
+import { usePetSocial } from '../hooks/usePetSocial';
 
 export default function PetScreen() {
   const { profile, partner, signOut } = useAuth();
   const { pet, loading, refresh: refreshPet } = useRealtimePet(profile?.pet_id);
   const { state: ritualState, refresh: refreshRitual } = usePetRitualState(profile?.pet_id);
   const careLogs = useCareLogs(profile?.pet_id);
+  const leaderboard = useLeaderboard();
+  const social = usePetSocial(profile?.pet_id);
+  const [screenTab, setScreenTab] = useState<PetScreenTab>('home');
 
   const [actionLoading, setActionLoading] = useState<CareAction | null>(null);
   const [moodOverride, setMoodOverride] = useState<PetMood | null>(null);
@@ -185,7 +193,11 @@ export default function PetScreen() {
         </header>
 
         <div className="game-console-body">
-          <section className="mochi-playground" aria-label="Pet playground">
+          <PetScreenNav active={screenTab} onChange={setScreenTab} />
+
+          {screenTab === 'home' && (
+            <>
+              <section className="mochi-playground" aria-label="Pet playground">
             <div className="mochi-playground-stage">
               {speechText && (
                 <SpeechBubble
@@ -250,6 +262,27 @@ export default function PetScreen() {
 
             <CareLogPanel logs={careLogs} />
           </div>
+            </>
+          )}
+
+          {screenTab === 'leaderboard' && (
+            <LeaderboardPanel
+              entries={leaderboard.data?.entries ?? []}
+              loading={leaderboard.loading}
+              error={leaderboard.error}
+              onRefresh={leaderboard.refresh}
+            />
+          )}
+
+          {screenTab === 'friends' && (
+            <FriendsPanel
+              social={social.state}
+              loading={social.loading}
+              error={social.error}
+              partnerUsername={partner?.username}
+              onRefresh={social.refresh}
+            />
+          )}
         </div>
       </div>
     </div>

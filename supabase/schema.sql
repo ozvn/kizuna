@@ -465,3 +465,6 @@ BEGIN
   ALTER PUBLICATION supabase_realtime ADD TABLE public.profiles;
 EXCEPTION WHEN duplicate_object THEN NULL;
 END $$;
+
+-- ─── Leaderboard + pet friendships ───
+-- Kurulum: supabase/migrations/leaderboard_and_friends.sql dosyasını SQL Editor'de çalıştırın.

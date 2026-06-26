@@ -79,6 +79,56 @@ export interface CareLog {
 
 export type CareAction = 'feed' | 'pet' | 'clean' | 'play';
 
+export type PetScreenTab = 'home' | 'leaderboard' | 'friends';
+
+export interface LeaderboardEntry {
+  rank: number;
+  pet_id: string;
+  pet_name: string;
+  level: number;
+  xp: number;
+  care_streak: number;
+  spirit_points: number;
+  score: number;
+  is_mine: boolean;
+}
+
+export interface LeaderboardResult {
+  entries: LeaderboardEntry[];
+  my_pet_id: string | null;
+}
+
+export interface PetFriendSummary {
+  pet_id: string;
+  pet_name: string;
+  level: number;
+  care_streak: number;
+  score: number;
+}
+
+export interface FriendRequestInfo {
+  id: string;
+  target_pet_id?: string;
+  target_pet_name?: string;
+  requester_pet_id?: string;
+  requester_pet_name?: string;
+  status: 'awaiting_sender' | 'awaiting_receiver' | 'accepted' | 'declined' | 'cancelled' | 'expired';
+  sender_approvals: string[];
+  receiver_approvals: string[];
+  owners: string[];
+  my_approved?: boolean;
+  needs_my_sender_approval?: boolean;
+  needs_my_receiver_approval?: boolean;
+  expires_at: string;
+}
+
+export interface PetSocialState {
+  friends: PetFriendSummary[];
+  outgoing_request: FriendRequestInfo | null;
+  incoming_request: FriendRequestInfo | null;
+  owner_ids: string[];
+}
+
 export const MOCHI_PHRASES = [
   'uww',
   'uffu puffu',
