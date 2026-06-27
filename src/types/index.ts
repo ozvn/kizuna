@@ -147,6 +147,22 @@ export interface PendingFriendPlay {
   expires_at: string;
 }
 
+export interface PendingPetRename {
+  id: string;
+  proposed_name: string;
+  initiated_by: string;
+  approvals: string[];
+  approval_count: number;
+  required_approvals: number;
+  needs_my_approval: boolean;
+  i_initiated: boolean;
+  expires_at: string;
+}
+
+export interface PetRenameState {
+  pending_request: PendingPetRename | null;
+}
+
 export const MOCHI_PHRASES = [
   'uww',
   'uffu puffu',

@@ -4,6 +4,7 @@ import { supabase } from '../lib/supabase';
 import { useAuth } from '../context/AuthContext';
 import { formatSupabaseError } from '../lib/supabaseErrors';
 import { validatePetName } from '../lib/petName';
+import { usePetNameAvailability } from '../hooks/usePetNameAvailability';
 import type { MatchRequest } from '../types';
 
 export default function Matchmaking() {
@@ -62,7 +63,7 @@ export default function Matchmaking() {
     setIncomingRequests(
       incoming.map((req) => ({
         ...(req as MatchRequest),
-        proposed_pet_name: (req as MatchRequest).proposed_pet_name ?? 'Mochi',
+        proposed_pet_name: (req as MatchRequest).proposed_pet_name ?? '',
         sender: { username: nameById.get(req.sender_id) ?? 'Unknown' },
       })),
     );
@@ -169,8 +170,18 @@ export default function Matchmaking() {
     }
   };
 
-  const petNameValid = validatePetName(petName).ok;
-  const canSend = petNameValid && targetUsername.trim().length > 0 && !loading;
+  const petNameCheck = validatePetName(petName);
+  const petNameValid = petNameCheck.ok;
+  const { available: nameAvailable, checking: nameChecking } = usePetNameAvailability(
+    petNameCheck.ok ? petNameCheck.name : petName,
+    { enabled: petNameValid },
+  );
+  const canSend =
+    petNameValid &&
+    nameAvailable !== false &&
+    !nameChecking &&
+    targetUsername.trim().length > 0 &&
+    !loading;
 
   return (
     <div className="game-device-canvas safe-area">
@@ -198,11 +209,21 @@ export default function Matchmaking() {
                 minLength={2}
                 maxLength={50}
                 className="game-input"
-                placeholder="Mochi, Poko, Kira…"
+                placeholder="Poko, Kira, Neko…"
               />
               <p className="game-caption text-ink-muted mt-1.5">
-                When accepted, your shared pet is born with this name.
+                When accepted, your shared pet is born with this name. Names are unique across
+                all pets.
               </p>
+              {petNameValid && nameChecking && (
+                <p className="game-caption text-ink-muted mt-1">Checking name…</p>
+              )}
+              {petNameValid && !nameChecking && nameAvailable === true && (
+                <p className="game-caption text-sage-dark mt-1">Name is available</p>
+              )}
+              {petNameValid && !nameChecking && nameAvailable === false && (
+                <p className="game-caption text-coral-dark mt-1">Pet name already taken</p>
+              )}
             </div>
 
             <div>
@@ -285,7 +306,8 @@ export default function Matchmaking() {
               ) : (
                 sentRequests.map((req) => {
                   const st = statusLabel(req.status);
-                  const displayPetName = req.proposed_pet_name ?? 'Mochi';
+                  const displayPetName =
+                    req.proposed_pet_name?.trim() || 'Unnamed pet';
                   return (
                     <div
                       key={req.id}

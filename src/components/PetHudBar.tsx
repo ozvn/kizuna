@@ -1,28 +1,44 @@
 import { Sparkles } from 'lucide-react';
+import PetRenameControl from './PetRenameControl';
+import type { PendingPetRename } from '../types';
 
 interface PetHudBarProps {
+  petId: string;
   level: number;
   petName: string;
   brs: number;
   rarityLabel: string;
   spiritPoints: number;
+  pendingRename: PendingPetRename | null;
+  onPetRenamed: (newName: string) => void;
+  onRenameStateChange: () => void;
 }
 
 export default function PetHudBar({
+  petId,
   level,
   petName,
   brs,
   rarityLabel,
   spiritPoints,
+  pendingRename,
+  onPetRenamed,
+  onRenameStateChange,
 }: PetHudBarProps) {
   return (
     <div className="game-hud-bar" role="group" aria-label="Pet status HUD">
-      <div className="game-hud-cluster">
+      <div className="game-hud-cluster game-hud-cluster-pet">
         <div className="game-hud-chip">
           <span className="game-hud-chip-label">LV</span>
           <span className="game-hud-chip-value font-pixel">{level}</span>
         </div>
-        <span className="game-hud-name game-caption text-ink-muted truncate">{petName}</span>
+        <PetRenameControl
+          petId={petId}
+          petName={petName}
+          pendingRequest={pendingRename}
+          onRenamed={onPetRenamed}
+          onStateChange={onRenameStateChange}
+        />
       </div>
 
       <div className="game-hud-divider" aria-hidden />

@@ -27,6 +27,7 @@ import LeaderboardPanel from './LeaderboardPanel';
 import FriendsPanel from './FriendsPanel';
 import { useLeaderboard } from '../hooks/useLeaderboard';
 import { usePetSocial } from '../hooks/usePetSocial';
+import { usePetRenameState } from '../hooks/usePetRenameState';
 
 export default function PetScreen() {
   const { profile, partner, signOut } = useAuth();
@@ -35,6 +36,7 @@ export default function PetScreen() {
   const careLogs = useCareLogs(profile?.pet_id);
   const leaderboard = useLeaderboard();
   const social = usePetSocial(profile?.pet_id);
+  const renameState = usePetRenameState(profile?.pet_id);
   const [screenTab, setScreenTab] = useState<PetScreenTab>('home');
 
   const [actionLoading, setActionLoading] = useState<CareAction | null>(null);
@@ -194,11 +196,15 @@ export default function PetScreen() {
         </header>
 
         <PetHudBar
+          petId={pet.id}
           level={pet.level}
           petName={pet.name}
           brs={brs}
           rarityLabel={getRarityLabel(brs)}
           spiritPoints={pet.spirit_points}
+          pendingRename={renameState.state?.pending_request ?? null}
+          onPetRenamed={() => void refreshPet()}
+          onRenameStateChange={renameState.refresh}
         />
 
         <div className="game-console-body">

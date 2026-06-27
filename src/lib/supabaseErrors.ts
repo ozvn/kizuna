@@ -32,6 +32,13 @@ const TR_TO_EN: Record<string, string> = {
 const KNOWN_USER_MESSAGES = new Set([
   'Not signed in',
   'Receiver username is required',
+  'Pet name already taken',
+  'That is already your pet name',
+  'A rename request is already pending',
+  'Rename request not found',
+  'This rename request is no longer pending',
+  'Rename request expired',
+  'You already approved this rename',
   'Pet name must be 2–50 characters',
   "You can't send a request to yourself",
   'User not found',
@@ -119,8 +126,14 @@ function formatMissingFunction(fullText: string): string {
   ) {
     return 'Ritual system is not active. Admin: run macro_ritual_loop.sql.';
   }
-  if (fullText.includes('ensure_user_profile')) {
-    return 'Profile system is not active. Admin: run fix_missing_profiles.sql.';
+  if (
+    fullText.includes('is_pet_name_available') ||
+    fullText.includes('rename_pet') ||
+    fullText.includes('initiate_pet_rename') ||
+    fullText.includes('confirm_pet_rename') ||
+    fullText.includes('get_pet_rename_state')
+  ) {
+    return 'Pet names update needs a migration. Admin: run unique_pet_names.sql and pet_rename_dual_approval.sql.';
   }
   if (
     fullText.includes('get_pet_leaderboard') ||
@@ -135,6 +148,9 @@ function formatMissingFunction(fullText: string): string {
     fullText.includes('decline_friend_play')
   ) {
     return 'Friend play needs an update. Admin: run friend_play.sql.';
+  }
+  if (fullText.includes('ensure_user_profile')) {
+    return 'Profile system is not active. Admin: run fix_missing_profiles.sql.';
   }
   return 'Server configuration is incomplete. Please try again later.';
 }
@@ -161,6 +177,9 @@ export function formatSupabaseError(error: SupabaseErrorInput): string {
   if (code === '23505') {
     if (fullText.includes('username') || fullText.includes('profiles_username')) {
       return 'This username is already taken.';
+    }
+    if (fullText.includes('idx_pets_name_unique') || fullText.includes('pets_name')) {
+      return 'Pet name already taken';
     }
     if (fullText.includes('match_requests') || fullText.includes('unique_pending')) {
       return 'You already sent a request to this user';

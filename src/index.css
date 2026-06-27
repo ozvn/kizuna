@@ -200,6 +200,56 @@ canvas,
   text-shadow: 1px 1px 0 var(--color-frame-light);
 }
 
+.game-hud-cluster-pet {
+  flex: 1;
+  min-width: 0;
+}
+
+.game-hud-name-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  min-width: 0;
+  max-width: 6.5rem;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.game-hud-rename-form {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+  max-width: 9rem;
+}
+
+.game-hud-rename-input {
+  flex: 1;
+  min-width: 0;
+  padding: 0.25rem 0.375rem !important;
+  font-size: 0.75rem !important;
+}
+
+.game-hud-rename-pending {
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+  min-width: 0;
+  max-width: 9rem;
+}
+
+.game-hud-rename-error,
+.game-hud-rename-hint {
+  width: 100%;
+  margin: 0;
+  line-height: 1.2;
+}
+
 .game-hud-name {
   max-width: 4.5rem;
 }
